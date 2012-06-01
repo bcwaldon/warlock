@@ -2,10 +2,11 @@ import setuptools
 
 
 def parse_requirements():
-    fap = open('requirements.txt', 'r')
-    raw_req = fap.read()
-    fap.close()
-    return raw_req.split('\n')
+#    fap = open('requirements.txt', 'r')
+#    raw_req = fap.read()
+#    fap.close()
+#    return raw_req.split('\n')
+    return ['jsonschema']
 
 
 setuptools.setup(

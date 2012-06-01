@@ -5,14 +5,14 @@
     import warlock
 
 	schema = {
-	    'name': 'Country':
+	    'name': 'Country',
 	    'properties': {
 	        'name': {'type': 'string'},
 	        'abbreviation': {'type': 'string'},
 	    },
 	}
 
-	Country = warlock.schema_class(schema)
+	Country = warlock.Class(schema)
 
 2) Create an object using your class
 
@@ -23,5 +23,5 @@
     sweden.name = 5
     # Raises ValueError
 
-    sweden.overlord = 'Brian'
+    sweden.overlord = 'Bears'
     # Raises AttributeError
