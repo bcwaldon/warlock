@@ -1,8 +1,15 @@
+"""Core Warlock functionality"""
+
 #import jsonschema
 
 
-def Class(schema):
-    class schema_class(object):
+def model_factory(schema):
+    """Generate a model class based on the provided JSON Schema
+
+    :param schema: dict representing valid JSON schema
+    """
+    class Model(object):
+        """Self-validating model for arbitrary objects"""
         def __init__(self, **kwargs):
             self.__dict__['raw'] = kwargs
 
@@ -18,4 +25,5 @@ def Class(schema):
             else:
                 raise AttributeError(key)
 
-    return schema_class
+    Model.__name__ = schema['name']
+    return Model

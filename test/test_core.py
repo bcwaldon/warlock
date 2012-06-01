@@ -13,7 +13,7 @@ class TestCore(unittest.TestCase):
             },
         }
 
-        Country = warlock.Class(schema)
+        Country = warlock.model_factory(schema)
 
         sweden = Country(name='Sweden', abbreviation='SE')
 

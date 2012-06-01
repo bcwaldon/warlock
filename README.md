@@ -12,7 +12,7 @@
 	    },
 	}
 
-	Country = warlock.Class(schema)
+	Country = warlock.model_factory(schema)
 
 2) Create an object using your class
 
