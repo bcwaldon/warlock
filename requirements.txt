@@ -1,1 +1,1 @@
-jsonschema
+jsonschema==0.2
