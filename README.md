@@ -1,27 +1,43 @@
 # Warlock!
 
-1) Create a class
+## Wat
 
-    import warlock
+Build self-validating python objects using JSON schemas
 
-	schema = {
+## How
+
+1) Build your schema
+
+	>>> schema = {
 	    'name': 'Country',
 	    'properties': {
 	        'name': {'type': 'string'},
 	        'abbreviation': {'type': 'string'},
 	    },
+	    'additionalProperties': False,
 	}
 
-	Country = warlock.model_factory(schema)
+2) Create a model
 
-2) Create an object using your class
+    >>> import warlock
+	>>> Country = warlock.model_factory(schema)
 
-	sweden = Country(name='Sweden', abbreviation='SE')
+3) Create an object using your model
 
-3) Let the object validate itself!
+	>>> sweden = Country(name='Sweden', abbreviation='SE')
 
-    sweden.name = 5
-    # Raises ValueError
+4) Let the object validate itself!
 
-    sweden.overlord = 'Bears'
-    # Raises AttributeError
+    >>> sweden.name = 5
+    Traceback (most recent call last):
+	  File "<stdin>", line 1, in <module>
+      File "warlock/core.py", line 53, in __setattr__
+        raise InvalidOperation()
+	warlock.core.InvalidOperation
+
+    >>> sweden.overlord = 'Bears'
+    Traceback (most recent call last):
+	  File "<stdin>", line 1, in <module>
+      File "warlock/core.py", line 53, in __setattr__
+        raise InvalidOperation()
+	warlock.core.InvalidOperation
