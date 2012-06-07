@@ -53,5 +53,5 @@ def model_factory(schema):
                 raise InvalidOperation()
             self.__dict__['raw'] = mutation
 
-    Model.__name__ = schema['name']
+    Model.__name__ = str(schema['name'])
     return Model
