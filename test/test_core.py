@@ -58,6 +58,12 @@ class TestCore(unittest.TestCase):
     def test_iteritems(self):
         Country = warlock.model_factory(fixture)
         sweden = Country(name='Sweden', population=9379116)
-        print sweden.iteritems()
         self.assertEqual(set(list(sweden.iteritems())),
                          set([('name', 'Sweden'), ('population', 9379116)]))
+
+    def test_dict_syntax(self):
+        Country = warlock.model_factory(fixture)
+        sweden = Country(name='Sweden', population=9379116)
+        self.assertEqual(sweden['name'], 'Sweden')
+        sweden['name'] = 'Finland'
+        self.assertEqual(sweden['name'], 'Finland')

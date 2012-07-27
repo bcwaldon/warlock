@@ -53,6 +53,12 @@ def model_factory(schema):
                 raise InvalidOperation()
             self.__dict__['raw'] = mutation
 
+        def __getitem__(self, key):
+            return self.__getattr__(key)
+
+        def __setitem__(self, key, value):
+            return self.__setattr__(key, value)
+
         def iteritems(self):
             return copy.deepcopy(self.__dict__['raw']).iteritems()
 
