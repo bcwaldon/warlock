@@ -55,10 +55,12 @@ class TestCore(unittest.TestCase):
         exc = warlock.InvalidOperation
         self.assertRaises(exc, setattr, sweden, 'abbreviation', 0)
 
-    def test_iteritems(self):
+    def test_items(self):
         Country = warlock.model_factory(fixture)
         sweden = Country(name='Sweden', population=9379116)
         self.assertEqual(set(list(sweden.iteritems())),
+                         set([('name', 'Sweden'), ('population', 9379116)]))
+        self.assertEqual(set(sweden.items()),
                          set([('name', 'Sweden'), ('population', 9379116)]))
 
     def test_dict_syntax(self):

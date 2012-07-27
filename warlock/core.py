@@ -62,5 +62,8 @@ def model_factory(schema):
         def iteritems(self):
             return copy.deepcopy(self.__dict__['raw']).iteritems()
 
+        def items(self):
+            return copy.deepcopy(self.__dict__['raw']).items()
+
     Model.__name__ = str(schema['name'])
     return Model
