@@ -40,11 +40,14 @@ def model_factory(schema):
 
         def __getattr__(self, key):
             try:
-                return self.__dict__['raw'][key]
+                return self.__getitem__(key)
             except KeyError:
                 raise AttributeError(key)
 
-        def __setattr__(self, key, value):
+        def __getitem__(self, key):
+            return self.__dict__['raw'][key]
+
+        def __setitem__(self, key, value):
             mutation = copy.deepcopy(self.__dict__['raw'])
             mutation[key] = value
             try:
@@ -53,11 +56,8 @@ def model_factory(schema):
                 raise InvalidOperation()
             self.__dict__['raw'] = mutation
 
-        def __getitem__(self, key):
-            return self.__getattr__(key)
-
-        def __setitem__(self, key, value):
-            return self.__setattr__(key, value)
+        def __setattr__(self, key, value):
+            self.__setitem__(key, value)
 
         def iteritems(self):
             return copy.deepcopy(self.__dict__['raw']).iteritems()
