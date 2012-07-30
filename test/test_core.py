@@ -69,3 +69,12 @@ class TestCore(unittest.TestCase):
         self.assertEqual(sweden['name'], 'Sweden')
         sweden['name'] = 'Finland'
         self.assertEqual(sweden['name'], 'Finland')
+
+    def test_changes(self):
+        Country = warlock.model_factory(fixture)
+        sweden = Country(name='Sweden', population=9379116)
+        self.assertEqual(sweden.changes, {})
+        sweden['name'] = 'Finland'
+        self.assertEqual(sweden.changes, {'name': 'Finland'})
+        sweden['name'] = 'Norway'
+        self.assertEqual(sweden.changes, {'name': 'Norway'})

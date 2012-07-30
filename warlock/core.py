@@ -38,6 +38,8 @@ def model_factory(schema):
             else:
                 self.__dict__['raw'] = kwargs
 
+            self.__dict__['changes'] = {}
+
         def __getattr__(self, key):
             try:
                 return self.__getitem__(key)
@@ -55,6 +57,7 @@ def model_factory(schema):
             except ValidationError:
                 raise InvalidOperation()
             self.__dict__['raw'] = mutation
+            self.__dict__['changes'][key] = value
 
         def __setattr__(self, key, value):
             self.__setitem__(key, value)
@@ -64,6 +67,10 @@ def model_factory(schema):
 
         def items(self):
             return copy.deepcopy(self.__dict__['raw']).items()
+
+        @property
+        def changes(self):
+            return copy.deepcopy(self.__dict__['changes'])
 
     Model.__name__ = str(schema['name'])
     return Model
