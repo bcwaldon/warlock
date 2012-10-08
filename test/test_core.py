@@ -14,6 +14,15 @@ fixture = {
 }
 
 
+complex_fixture = {
+    'name': 'Mixmaster',
+    'properties': {
+        'sub': {'type': 'object',
+                'properties': {'foo': {'type': 'string'}}}
+    },
+}
+
+
 class TestCore(unittest.TestCase):
     def test_create_invalid_object(self):
         Country = warlock.model_factory(fixture)
@@ -62,6 +71,49 @@ class TestCore(unittest.TestCase):
                          set([('name', 'Sweden'), ('population', 9379116)]))
         self.assertEqual(set(sweden.items()),
                          set([('name', 'Sweden'), ('population', 9379116)]))
+
+    def test_update(self):
+        Country = warlock.model_factory(fixture)
+        sweden = Country(name='Sweden', population=9379116)
+        exc = warlock.InvalidOperation
+        self.assertRaises(exc, sweden.update, {'population': 'N/A'})
+        self.assertRaises(exc, sweden.update, {'overloard': 'Bears'})
+
+    def test_deepcopy(self):
+        """Make sure we aren't leaking references."""
+        Mixmaster = warlock.model_factory(complex_fixture)
+        mike = Mixmaster(sub={'foo': 'mike'})
+
+        self.assertEquals(mike.sub['foo'], 'mike')
+
+        mike_1 = mike.copy()
+        mike_1['sub']['foo'] = 'james'
+        self.assertEquals(mike.sub['foo'], 'mike')
+
+        mike_2 = dict(mike.iteritems())
+        mike_2['sub']['foo'] = 'james'
+        self.assertEquals(mike.sub['foo'], 'mike')
+
+        mike_2 = dict(mike.items())
+        mike_2['sub']['foo'] = 'james'
+        self.assertEquals(mike.sub['foo'], 'mike')
+
+        mike_3_sub = list(mike.itervalues())[0]
+        mike_3_sub['foo'] = 'james'
+        self.assertEquals(mike.sub['foo'], 'mike')
+
+        mike_3_sub = list(mike.values())[0]
+        mike_3_sub['foo'] = 'james'
+        self.assertEquals(mike.sub['foo'], 'mike')
+
+    def test_forbidden_methods(self):
+        Country = warlock.model_factory(fixture)
+        sweden = Country(name='Sweden', population=9379116)
+        exc = warlock.InvalidOperation
+        self.assertRaises(exc, sweden.clear)
+        self.assertRaises(exc, sweden.pop, 0)
+        self.assertRaises(exc, sweden.popitem)
+        self.assertRaises(exc, sweden.__delitem__, 'name')
 
     def test_dict_syntax(self):
         Country = warlock.model_factory(fixture)
