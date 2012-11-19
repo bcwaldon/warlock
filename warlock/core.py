@@ -24,8 +24,8 @@ def model_factory(schema):
         """Apply a JSON schema to an object"""
         try:
             jsonschema.validate(obj, schema)
-        except jsonschema.ValidationError:
-            raise ValidationError()
+        except jsonschema.ValidationError as exc:
+            raise ValidationError(str(exc))
 
     class Model(dict):
         """Self-validating model for arbitrary objects"""
@@ -37,8 +37,8 @@ def model_factory(schema):
             self.__dict__['validator'] = validator
             try:
                 self.validator(d)
-            except ValidationError:
-                raise ValueError()
+            except ValidationError as exc:
+                raise ValueError(str(exc))
             else:
                 dict.__init__(self, d)
 
@@ -56,7 +56,8 @@ def model_factory(schema):
             try:
                 self.validator(mutation)
             except ValidationError:
-                raise InvalidOperation()
+                msg = "Unable to set '%s' to '%s'" % (key, value)
+                raise InvalidOperation(msg)
 
             dict.__setitem__(self, key, value)
 
@@ -86,8 +87,8 @@ def model_factory(schema):
             mutation.update(other)
             try:
                 self.validator(mutation)
-            except ValidationError:
-                raise InvalidOperation()
+            except ValidationError as exc:
+                raise InvalidOperation(str(exc))
             dict.update(self, other)
 
         def iteritems(self):
