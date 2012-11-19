@@ -32,12 +32,12 @@ Build self-validating python objects using JSON schemas
     Traceback (most recent call last):
 	  File "<stdin>", line 1, in <module>
       File "warlock/core.py", line 53, in __setattr__
-        raise InvalidOperation()
-	warlock.core.InvalidOperation
+        raise InvalidOperation(msg)
+    warlock.core.InvalidOperation: Unable to set 'name' to '5'
 
     >>> sweden.overlord = 'Bears'
     Traceback (most recent call last):
 	  File "<stdin>", line 1, in <module>
       File "warlock/core.py", line 53, in __setattr__
-        raise InvalidOperation()
-	warlock.core.InvalidOperation
+        raise InvalidOperation(msg)
+    warlock.core.InvalidOperation: Unable to set 'overlord' to 'Bears'
