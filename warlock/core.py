@@ -3,6 +3,7 @@
 import copy
 
 import jsonschema
+import jsonpatch
 
 
 class InvalidOperation(RuntimeError):
@@ -43,6 +44,7 @@ def model_factory(schema):
                 dict.__init__(self, d)
 
             self.__dict__['changes'] = {}
+            self.__dict__['__original__'] = copy.deepcopy(d)
 
         def __getattr__(self, key):
             try:
@@ -117,6 +119,11 @@ def model_factory(schema):
         @property
         def changes(self):
             return copy.deepcopy(self.__dict__['changes'])
+
+        @property
+        def patch(self):
+            original = self.__dict__['__original__']
+            return jsonpatch.make_patch(original, dict(self)).to_string()
 
     Model.__name__ = str(schema['name'])
     return Model

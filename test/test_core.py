@@ -142,3 +142,47 @@ class TestCore(unittest.TestCase):
         self.assertEqual(sweden.changes, {'name': 'Finland'})
         sweden['name'] = 'Norway'
         self.assertEqual(sweden.changes, {'name': 'Norway'})
+
+    def test_patch_no_changes(self):
+        Country = warlock.model_factory(fixture)
+        sweden = Country(name='Sweden', population=9379116)
+        self.assertEqual(sweden.patch, '[]')
+
+    def test_patch_alter_value(self):
+        Country = warlock.model_factory(fixture)
+        sweden = Country(name='Sweden', population=9379116)
+        sweden['name'] = 'Finland'
+        self.assertEqual(
+            sweden.patch,
+            '[{"path": "/name", "value": "Finland", "op": "replace"}]')
+
+    def test_patch_drop_attribute(self):
+        Country = warlock.model_factory(fixture)
+        sweden = Country(name='Sweden', population=9379116)
+        del sweden['name']
+        self.assertEqual(sweden.patch, '[{"path": "/name", "op": "remove"}]')
+
+    def test_patch_reduce_operations(self):
+        Country = warlock.model_factory(fixture)
+        sweden = Country(name='Sweden', population=9379116)
+
+        sweden['name'] = 'Finland'
+        self.assertEqual(
+            sweden.patch,
+            '[{"path": "/name", "value": "Finland", "op": "replace"}]')
+
+        sweden['name'] = 'Norway'
+        self.assertEqual(
+            sweden.patch,
+            '[{"path": "/name", "value": "Norway", "op": "replace"}]')
+
+    def test_patch_multiple_operations(self):
+        Country = warlock.model_factory(fixture)
+        sweden = Country(name='Sweden', population=9379116)
+
+        sweden['name'] = 'Finland'
+        sweden['population'] = 5387000
+        self.assertEqual(
+            sweden.patch,
+            '[{"path": "/name", "value": "Finland", "op": "replace"}, '
+            '{"path": "/population", "value": 5387000, "op": "replace"}]')
