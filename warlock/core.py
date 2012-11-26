@@ -76,7 +76,18 @@ def model_factory(schema):
             raise InvalidOperation()
 
         def __delitem__(self, key):
-            raise InvalidOperation()
+            mutation = dict(self.items())
+            del mutation[key]
+            try:
+                self.validator(mutation)
+            except ValidationError:
+                msg = "Unable to delete attribute '%s'" % (key)
+                raise InvalidOperation(msg)
+
+            dict.__delitem__(self, key)
+
+        def __delattr__(self, key):
+            self.__delitem__(key)
 
         # NOTE(termie): This is kind of the opposite of what copy usually does
         def copy(self):

@@ -113,14 +113,26 @@ class TestCore(unittest.TestCase):
         self.assertRaises(exc, sweden.clear)
         self.assertRaises(exc, sweden.pop, 0)
         self.assertRaises(exc, sweden.popitem)
-        self.assertRaises(exc, sweden.__delitem__, 'name')
 
     def test_dict_syntax(self):
         Country = warlock.model_factory(fixture)
         sweden = Country(name='Sweden', population=9379116)
-        self.assertEqual(sweden['name'], 'Sweden')
+
         sweden['name'] = 'Finland'
         self.assertEqual(sweden['name'], 'Finland')
+
+        del sweden['name']
+        self.assertRaises(AttributeError, getattr, sweden, 'name')
+
+    def test_attr_syntax(self):
+        Country = warlock.model_factory(fixture)
+        sweden = Country(name='Sweden', population=9379116)
+
+        sweden.name = 'Finland'
+        self.assertEqual(sweden.name, 'Finland')
+
+        delattr(sweden, 'name')
+        self.assertRaises(AttributeError, getattr, sweden, 'name')
 
     def test_changes(self):
         Country = warlock.model_factory(fixture)
