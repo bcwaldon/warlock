@@ -10,7 +10,7 @@ def parse_requirements():
 
 setuptools.setup(
     name='warlock',
-    version='0.7.0',
+    version='0.7.1',
     description='Python object model built on JSON schema and JSON patch.',
     author='Brian Waldon',
     author_email='bcwaldon@gmail.com',
