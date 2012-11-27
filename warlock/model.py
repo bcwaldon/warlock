@@ -3,15 +3,13 @@
 import copy
 
 import jsonpatch
+import jsonschema
 
 import exceptions
 
 
 class Model(dict):
     def __init__(self, *args, **kwargs):
-        # Load the validator from the kwargs
-        #self.__dict__['validator'] = kwargs.pop('validator', self.default_validator)
-
         # we overload setattr so set this manually
         d = dict(*args, **kwargs)
 
@@ -104,5 +102,9 @@ class Model(dict):
         original = self.__dict__['__original__']
         return jsonpatch.make_patch(original, dict(self)).to_string()
 
-    def default_validator(self, *args, **kwargs):
-        return True
+    def validator(self, obj):
+        """Apply a JSON schema to an object"""
+        try:
+            jsonschema.validate(obj, self.schema)
+        except jsonschema.ValidationError as exc:
+            raise exceptions.ValidationError(str(exc))
