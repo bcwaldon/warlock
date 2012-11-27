@@ -3,7 +3,6 @@
 import copy
 
 import model
-from errors import *
 
 def model_factory(schema, base_class=model.Model):
     """Generate a model class based on the provided JSON Schema

@@ -1,3 +1,5 @@
+"""Self-validating model for arbitrary objects"""
+
 import copy
 
 import jsonschema
@@ -6,7 +8,6 @@ import jsonpatch
 from errors import *
 
 class Model(dict):
-    """Self-validating model for arbitrary objects"""
     def __init__(self, schema, *args, **kwargs):
         # Load the validator from the kwargs
         self.__dict__['schema'] = schema
