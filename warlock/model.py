@@ -1,18 +1,15 @@
 import copy
 
+import jsonschema
 import jsonpatch
 
 from errors import *
 
 class Model(dict):
     """Self-validating model for arbitrary objects"""
-    def __init__(self, *args, **kwargs):
+    def __init__(self, schema, *args, **kwargs):
         # Load the validator from the kwargs
-        try:
-            self.__dict__['validator'] = kwargs['validator']
-            del kwargs['validator']
-        except KeyError:
-            self.__dict__['validator'] = self.default_validator
+        self.__dict__['schema'] = schema
 
         # we overload setattr so set this manually
         d = dict(*args, **kwargs)
@@ -106,7 +103,9 @@ class Model(dict):
         original = self.__dict__['__original__']
         return jsonpatch.make_patch(original, dict(self)).to_string()
 
-    def default_validator(self, *args, **kwargs):
-        return True
-
-
+    def validator(self, obj):
+        """Apply a JSON schema to an object"""
+        try:
+            jsonschema.validate(obj, self.schema)
+        except jsonschema.ValidationError as exc:
+            raise ValidationError(str(exc))
