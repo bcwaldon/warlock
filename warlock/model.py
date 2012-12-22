@@ -14,7 +14,7 @@ class Model(dict):
         d = dict(*args, **kwargs)
 
         try:
-            self.validator(d)
+            self.validate(d)
         except exceptions.ValidationError as exc:
             raise ValueError(str(exc))
         else:
@@ -27,7 +27,7 @@ class Model(dict):
         mutation = dict(self.items())
         mutation[key] = value
         try:
-            self.validator(mutation)
+            self.validate(mutation)
         except exceptions.ValidationError:
             msg = "Unable to set '%s' to '%s'" % (key, value)
             raise exceptions.InvalidOperation(msg)
@@ -40,7 +40,7 @@ class Model(dict):
         mutation = dict(self.items())
         del mutation[key]
         try:
-            self.validator(mutation)
+            self.validate(mutation)
         except exceptions.ValidationError:
             msg = "Unable to delete attribute '%s'" % (key)
             raise exceptions.InvalidOperation(msg)
@@ -77,7 +77,7 @@ class Model(dict):
         mutation = dict(self.items())
         mutation.update(other)
         try:
-            self.validator(mutation)
+            self.validate(mutation)
         except exceptions.ValidationError as exc:
             raise exceptions.InvalidOperation(str(exc))
         dict.update(self, other)
@@ -107,7 +107,7 @@ class Model(dict):
         """Dumber version of 'patch' method - this should be deprecated"""
         return copy.deepcopy(self.__dict__['changes'])
 
-    def validator(self, obj):
+    def validate(self, obj):
         """Apply a JSON schema to an object"""
         try:
             jsonschema.validate(obj, self.schema)
