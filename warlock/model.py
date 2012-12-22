@@ -23,12 +23,6 @@ class Model(dict):
         self.__dict__['changes'] = {}
         self.__dict__['__original__'] = copy.deepcopy(d)
 
-    def __getattr__(self, key):
-        try:
-            return self.__getitem__(key)
-        except KeyError:
-            raise AttributeError(key)
-
     def __setitem__(self, key, value):
         mutation = dict(self.items())
         mutation[key] = value
@@ -42,18 +36,6 @@ class Model(dict):
 
         self.__dict__['changes'][key] = value
 
-    def __setattr__(self, key, value):
-        self.__setitem__(key, value)
-
-    def clear(self):
-        raise exceptions.InvalidOperation()
-
-    def pop(self, key, default=None):
-        raise exceptions.InvalidOperation()
-
-    def popitem(self):
-        raise exceptions.InvalidOperation()
-
     def __delitem__(self, key):
         mutation = dict(self.items())
         del mutation[key]
@@ -65,10 +47,29 @@ class Model(dict):
 
         dict.__delitem__(self, key)
 
+    def __getattr__(self, key):
+        try:
+            return self.__getitem__(key)
+        except KeyError:
+            raise AttributeError(key)
+
+    def __setattr__(self, key, value):
+        self.__setitem__(key, value)
+
     def __delattr__(self, key):
         self.__delitem__(key)
 
-    # NOTE(termie): This is kind of the opposite of what copy usually does
+    ### BEGIN dict compatibility methods ###
+
+    def clear(self):
+        raise exceptions.InvalidOperation()
+
+    def pop(self, key, default=None):
+        raise exceptions.InvalidOperation()
+
+    def popitem(self):
+        raise exceptions.InvalidOperation()
+
     def copy(self):
         return copy.deepcopy(dict(self))
 
@@ -93,14 +94,18 @@ class Model(dict):
     def values(self):
         return copy.deepcopy(dict(self)).values()
 
-    @property
-    def changes(self):
-        return copy.deepcopy(self.__dict__['changes'])
+    ### END dict compatibility methods ###
 
     @property
     def patch(self):
+        """Return a jsonpatch object representing the delta"""
         original = self.__dict__['__original__']
         return jsonpatch.make_patch(original, dict(self)).to_string()
+
+    @property
+    def changes(self):
+        """Dumber version of 'patch' method - this should be deprecated"""
+        return copy.deepcopy(self.__dict__['changes'])
 
     def validator(self, obj):
         """Apply a JSON schema to an object"""
