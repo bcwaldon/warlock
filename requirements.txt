@@ -1,2 +1,2 @@
-jsonschema>=0.7,<1
+jsonschema>=0.7,<2
 jsonpatch>=0.10,<=0.12
