@@ -15,6 +15,7 @@
 """Self-validating model for arbitrary objects"""
 
 import copy
+import warnings
 
 import jsonpatch
 import jsonschema
@@ -118,7 +119,9 @@ class Model(dict):
 
     @property
     def changes(self):
-        """Dumber version of 'patch' method - this should be deprecated"""
+        """Dumber version of 'patch' method"""
+        deprecation_msg = 'Model.changes will be removed in warlock v2'
+        warnings.warn(deprecation_msg, DeprecationWarning, stacklevel=2)
         return copy.deepcopy(self.__dict__['changes'])
 
     def validate(self, obj):
