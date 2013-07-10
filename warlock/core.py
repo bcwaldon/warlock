@@ -16,7 +16,7 @@
 
 import copy
 
-import model
+from . import model
 
 
 def model_factory(schema, base_class=model.Model):
