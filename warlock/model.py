@@ -19,8 +19,9 @@ import warnings
 
 import jsonpatch
 import jsonschema
+import six
 
-import exceptions
+from . import exceptions
 
 
 class Model(dict):
@@ -98,13 +99,13 @@ class Model(dict):
         dict.update(self, other)
 
     def iteritems(self):
-        return copy.deepcopy(dict(self)).iteritems()
+        return six.iteritems(copy.deepcopy(dict(self)))
 
     def items(self):
         return copy.deepcopy(dict(self)).items()
 
     def itervalues(self):
-        return copy.deepcopy(dict(self)).itervalues()
+        return six.itervalues(copy.deepcopy(dict(self)))
 
     def values(self):
         return copy.deepcopy(dict(self)).values()
