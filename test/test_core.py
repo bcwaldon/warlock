@@ -172,6 +172,27 @@ class TestCore(unittest.TestCase):
             sweden.patch,
             '[{"path": "/name", "value": "Finland", "op": "replace"}]')
 
+    def test_apply_changes(self):
+        Country = warlock.model_factory(fixture)
+        sweden = Country(name='Sweden', population=9379116)
+        self.assertEqual(sweden.changes, {})
+        sweden['name'] = 'Finland'
+        self.assertEqual(sweden.changes, {'name': 'Finland'})
+        sweden.apply_changes()
+        self.assertEqual(sweden.changes, {})
+
+    def test_patch_after_applying_changes(self):
+        Country = warlock.model_factory(fixture)
+        sweden = Country(name='Sweden', population=9379116)
+        self.assertEqual(sweden.changes, {})
+        sweden['name'] = 'Finland'
+        self.assertEqual(sweden.changes, {'name': 'Finland'})
+        sweden.apply_changes()
+        del sweden['population']
+        self.assertEqual(
+            sweden.patch,
+            '[{"path": "/population", "op": "remove"}]')
+
     def test_patch_drop_attribute(self):
         Country = warlock.model_factory(fixture)
         sweden = Country(name='Sweden', population=9379116)
