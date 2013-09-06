@@ -44,8 +44,9 @@ class Model(dict):
         mutation[key] = value
         try:
             self.validate(mutation)
-        except exceptions.ValidationError:
-            msg = "Unable to set '%s' to '%s'" % (key, value)
+        except exceptions.ValidationError as exc:
+            msg = ("Unable to set '%s' to '%s'. Reason: %s"
+                   % (key, value, str(exc)))
             raise exceptions.InvalidOperation(msg)
 
         dict.__setitem__(self, key, value)
@@ -57,8 +58,9 @@ class Model(dict):
         del mutation[key]
         try:
             self.validate(mutation)
-        except exceptions.ValidationError:
-            msg = "Unable to delete attribute '%s'" % (key)
+        except exceptions.ValidationError as exc:
+            msg = ("Unable to delete attribute '%s'. Reason: %s"
+                   % (key, str(exc)))
             raise exceptions.InvalidOperation(msg)
 
         dict.__delitem__(self, key)
