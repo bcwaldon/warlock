@@ -38,6 +38,24 @@ complex_fixture = {
     },
 }
 
+parent_fixture = {
+    'name': 'Parent',
+    'properties': {
+        'name': {'type': 'string'},
+        'children': {'type': 'array', 'items': [{'type': 'object'}]}
+    },
+    'required': ['name', 'children']
+}
+
+child_fixture = {
+    'name': 'Child',
+    'properties': {
+        'age': {'type':'integer'},
+        'mother': {'type': 'object'}
+    },
+    'required': ['age', 'mother']
+}
+
 
 class TestCore(unittest.TestCase):
     def test_create_invalid_object(self):
@@ -202,3 +220,17 @@ class TestCore(unittest.TestCase):
             sweden.patch,
             '[{"path": "/name", "value": "Finland", "op": "replace"}, '
             '{"path": "/population", "value": 5387000, "op": "replace"}]')
+
+    def test_recursive_models(self):
+        Parent = warlock.model_factory(parent_fixture)
+        Child = warlock.model_factory(child_fixture)
+
+        mom = Parent(name='Abby', children=[])
+
+        teenager = Child(age=15, mother=mom)
+        toddler = Child(age=3, mother=mom)
+
+        mom.children = [teenager, toddler]
+
+        self.assertEqual(mom.children[0].age, 15)
+        self.assertEqual(mom.children[1].age, 3)
