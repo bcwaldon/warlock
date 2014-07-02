@@ -91,6 +91,12 @@ class Model(dict):
     def copy(self):
         return copy.deepcopy(dict(self))
 
+    def __copy__(self):
+        return self.copy()
+
+    def __deepcopy__(self, memo):
+        return copy.deepcopy(dict(self), memo)
+
     def update(self, other):
         mutation = dict(self.items())
         mutation.update(other)
