@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import copy
+import json
 import unittest
 
 import six
@@ -169,14 +170,15 @@ class TestCore(unittest.TestCase):
         sweden = Country(name='Sweden', population=9379116)
         sweden['name'] = 'Finland'
         self.assertEqual(
-            sweden.patch,
-            '[{"path": "/name", "value": "Finland", "op": "replace"}]')
+            json.loads(sweden.patch),
+            [{"path": "/name", "value": "Finland", "op": "replace"}])
 
     def test_patch_drop_attribute(self):
         Country = warlock.model_factory(fixture)
         sweden = Country(name='Sweden', population=9379116)
         del sweden['name']
-        self.assertEqual(sweden.patch, '[{"path": "/name", "op": "remove"}]')
+        self.assertEqual(json.loads(sweden.patch),
+                         [{"path": "/name", "op": "remove"}])
 
     def test_patch_reduce_operations(self):
         Country = warlock.model_factory(fixture)
@@ -184,13 +186,13 @@ class TestCore(unittest.TestCase):
 
         sweden['name'] = 'Finland'
         self.assertEqual(
-            sweden.patch,
-            '[{"path": "/name", "value": "Finland", "op": "replace"}]')
+            json.loads(sweden.patch),
+            [{"path": "/name", "value": "Finland", "op": "replace"}])
 
         sweden['name'] = 'Norway'
         self.assertEqual(
-            sweden.patch,
-            '[{"path": "/name", "value": "Norway", "op": "replace"}]')
+            json.loads(sweden.patch),
+            [{"path": "/name", "value": "Norway", "op": "replace"}])
 
     def test_patch_multiple_operations(self):
         Country = warlock.model_factory(fixture)
@@ -198,7 +200,10 @@ class TestCore(unittest.TestCase):
 
         sweden['name'] = 'Finland'
         sweden['population'] = 5387000
-        self.assertEqual(
-            sweden.patch,
-            '[{"path": "/name", "value": "Finland", "op": "replace"}, '
-            '{"path": "/population", "value": 5387000, "op": "replace"}]')
+        patch_obj = json.loads(sweden.patch)
+
+        test_obj = [{"path": "/population", "value": 5387000, "op": "replace"},
+                    {"path": "/name", "value": "Finland", "op": "replace"}]
+
+        self.assertEqual(patch_obj.count(test_obj[0]), 1)
+        self.assertEqual(patch_obj.count(test_obj[1]), 1)
