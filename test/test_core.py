@@ -15,6 +15,8 @@
 import copy
 import unittest
 
+import json
+
 import six
 
 import warlock
@@ -169,14 +171,17 @@ class TestCore(unittest.TestCase):
         sweden = Country(name='Sweden', population=9379116)
         sweden['name'] = 'Finland'
         self.assertEqual(
-            sweden.patch,
-            '[{"path": "/name", "value": "Finland", "op": "replace"}]')
+            json.loads(sweden.patch),
+            json.loads(
+                '[{"path": "/name", "value": "Finland", "op": "replace"}]'))
 
     def test_patch_drop_attribute(self):
         Country = warlock.model_factory(fixture)
         sweden = Country(name='Sweden', population=9379116)
         del sweden['name']
-        self.assertEqual(sweden.patch, '[{"path": "/name", "op": "remove"}]')
+        self.assertEqual(
+            json.loads(sweden.patch),
+            json.loads('[{"path": "/name", "op": "remove"}]'))
 
     def test_patch_reduce_operations(self):
         Country = warlock.model_factory(fixture)
@@ -184,13 +189,15 @@ class TestCore(unittest.TestCase):
 
         sweden['name'] = 'Finland'
         self.assertEqual(
-            sweden.patch,
-            '[{"path": "/name", "value": "Finland", "op": "replace"}]')
+            json.loads(sweden.patch),
+            json.loads(
+                '[{"path": "/name", "value": "Finland", "op": "replace"}]'))
 
         sweden['name'] = 'Norway'
         self.assertEqual(
-            sweden.patch,
-            '[{"path": "/name", "value": "Norway", "op": "replace"}]')
+            json.loads(sweden.patch),
+            json.loads(
+                '[{"path": "/name", "value": "Norway", "op": "replace"}]'))
 
     def test_patch_multiple_operations(self):
         Country = warlock.model_factory(fixture)
@@ -198,7 +205,12 @@ class TestCore(unittest.TestCase):
 
         sweden['name'] = 'Finland'
         sweden['population'] = 5387000
-        self.assertEqual(
-            sweden.patch,
+
+        self.assertEqual(len(json.loads(sweden.patch)), 2)
+
+        patches = json.loads(
             '[{"path": "/name", "value": "Finland", "op": "replace"}, '
             '{"path": "/population", "value": 5387000, "op": "replace"}]')
+
+        for patch in json.loads(sweden.patch):
+            self.assertTrue(patch in patches)
