@@ -41,6 +41,15 @@ complex_fixture = {
 }
 
 
+nameless_fixture = {
+    'properties': {
+        'name': {'type': 'string'},
+        'population': {'type': 'integer'},
+    },
+    'additionalProperties': False,
+}
+
+
 class TestCore(unittest.TestCase):
     def test_create_invalid_object(self):
         Country = warlock.model_factory(fixture)
@@ -96,6 +105,19 @@ class TestCore(unittest.TestCase):
         exc = warlock.InvalidOperation
         self.assertRaises(exc, sweden.update, {'population': 'N/A'})
         self.assertRaises(exc, sweden.update, {'overloard': 'Bears'})
+    
+    def test_naming(self):
+        Country = warlock.model_factory(fixture)
+        self.assertEqual(Country.__name__, 'Country')
+        
+        Country2 = warlock.model_factory(fixture, name='Country2')
+        self.assertEqual(Country2.__name__, 'Country2')
+        
+        nameless = warlock.model_factory(nameless_fixture)
+        self.assertEqual(nameless.__name__, 'Model')
+        
+        nameless2 = warlock.model_factory(nameless_fixture, name='Country3')
+        self.assertEqual(nameless2.__name__, 'Country3')
 
     def test_deepcopy(self):
         """Make sure we aren't leaking references."""
