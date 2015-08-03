@@ -19,10 +19,11 @@ import copy
 from . import model
 
 
-def model_factory(schema, base_class=model.Model):
+def model_factory(schema, base_class=model.Model, name=None):
     """Generate a model class based on the provided JSON Schema
 
     :param schema: dict representing valid JSON schema
+    :param name: A name to give the class, if `name` is not in `schema`
     """
     schema = copy.deepcopy(schema)
 
@@ -31,5 +32,8 @@ def model_factory(schema, base_class=model.Model):
             self.__dict__['schema'] = schema
             base_class.__init__(self, *args, **kwargs)
 
-    Model.__name__ = str(schema['name'])
+    if name is not None:
+        Model.__name__ = name
+    elif 'name' in schema:
+        Model.__name__ = str(schema['name'])
     return Model
