@@ -265,8 +265,8 @@ class TestCore(unittest.TestCase):
             'population': 53865800,
             'overlord': {
                 'title': 'Queen',
-                 'lastname': 'Windsor',
-                 'firstname': 'Elizabeth'
+                'lastname': 'Windsor',
+                'firstname': 'Elizabeth'
              }
         }
         self.assertEqual(england, expected)
