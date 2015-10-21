@@ -38,7 +38,7 @@ class Model(dict):
             dict.__init__(self, d)
 
         self.__dict__['changes'] = {}
-        self.__dict__['__original__'] = copy.deepcopy(d)
+        self.__dict__['__original__'] = dict.copy(d)
 
     def __setitem__(self, key, value):
         mutation = dict(self.items())
