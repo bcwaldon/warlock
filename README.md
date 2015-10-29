@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/ISA-tools/warlock.svg?branch=master)](https://travis-ci.org/ISA-tools/warlock)
+
 # Warlock
 
 Build self-validating python objects using JSON schemas.
