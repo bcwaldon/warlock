@@ -1,0 +1,10 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema",
+    "name": "Country",
+    "properties": {
+        "name": {"type": "string"},
+        "population": {"type": "integer"},
+        "overlord": { "$ref": "person.json#" }
+    },
+    "additionalProperties": false
+}

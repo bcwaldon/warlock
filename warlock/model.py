@@ -25,6 +25,7 @@ from . import exceptions
 
 
 class Model(dict):
+
     def __init__(self, *args, **kwargs):
         # we overload setattr so set this manually
         d = dict(*args, **kwargs)
@@ -91,6 +92,12 @@ class Model(dict):
     def copy(self):
         return copy.deepcopy(dict(self))
 
+    def __copy__(self):
+        return self.copy()
+
+    def __deepcopy__(self, memo):
+        return copy.deepcopy(dict(self), memo)
+
     def update(self, other):
         mutation = dict(self.items())
         mutation.update(other)
@@ -130,6 +137,9 @@ class Model(dict):
     def validate(self, obj):
         """Apply a JSON schema to an object"""
         try:
-            jsonschema.validate(obj, self.schema)
+            if self.resolver is not None:
+                jsonschema.validate(obj, self.schema, resolver=self.resolver)
+            else:
+                jsonschema.validate(obj, self.schema)
         except jsonschema.ValidationError as exc:
             raise exceptions.ValidationError(str(exc))
