@@ -53,7 +53,7 @@ parent_fixture = {
 child_fixture = {
     'name': 'Child',
     'properties': {
-        'age': {'type':'integer'},
+        'age': {'type': 'integer'},
         'mother': {'type': 'object'}
     },
     'required': ['age', 'mother']
@@ -258,11 +258,14 @@ class TestCore(unittest.TestCase):
 
     def test_resolver(self):
         from jsonschema import RefResolver
-        schemas_path = 'file://' + os.path.join(os.path.dirname(__file__), 'schemas/')
+        dirname = os.path.dirname(__file__)
+        schemas_path = 'file://' + os.path.join(dirname, 'schemas/')
         resolver = RefResolver(schemas_path, None)
 
-        country_schema_file = open(os.path.join(os.path.dirname(__file__), 'schemas/') + 'country.json')
-        person_schema_file = open(os.path.join(os.path.dirname(__file__), 'schemas/') + 'person.json')
+        country_schema_file = \
+            open(os.path.join(dirname, 'schemas/') + 'country.json')
+        person_schema_file = \
+            open(os.path.join(dirname, 'schemas/') + 'person.json')
 
         country_schema = json.load(country_schema_file)
         person_schema = json.load(person_schema_file)

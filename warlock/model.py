@@ -78,7 +78,7 @@ class Model(dict):
     def __delattr__(self, key):
         self.__delitem__(key)
 
-    ### BEGIN dict compatibility methods ###
+    # BEGIN dict compatibility methods
 
     def clear(self):
         raise exceptions.InvalidOperation()
@@ -119,7 +119,7 @@ class Model(dict):
     def values(self):
         return copy.deepcopy(dict(self)).values()
 
-    ### END dict compatibility methods ###
+    # END dict compatibility methods
 
     @property
     def patch(self):
