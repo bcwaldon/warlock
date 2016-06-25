@@ -1,5 +1,7 @@
 # Warlock
 
+[![Build Status](https://travis-ci.org/bcwaldon/warlock.svg?branch=master)](https://travis-ci.org/bcwaldon/warlock)
+
 Build self-validating python objects using JSON schemas.
 
 1) Create your schema
