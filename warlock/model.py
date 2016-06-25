@@ -46,7 +46,7 @@ class Model(dict):
         try:
             self.validate(mutation)
         except exceptions.ValidationError as exc:
-            msg = ("Unable to set '%s' to '%s'. Reason: %s"
+            msg = ("Unable to set '%s' to %r. Reason: %s"
                    % (key, value, str(exc)))
             raise exceptions.InvalidOperation(msg)
 
