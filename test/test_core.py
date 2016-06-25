@@ -14,6 +14,7 @@
 
 import copy
 import unittest
+import os
 
 import json
 
@@ -38,6 +39,24 @@ complex_fixture = {
         'sub': {'type': 'object',
                 'properties': {'foo': {'type': 'string'}}}
     },
+}
+
+parent_fixture = {
+    'name': 'Parent',
+    'properties': {
+        'name': {'type': 'string'},
+        'children': {'type': 'array', 'items': [{'type': 'object'}]}
+    },
+    'required': ['name', 'children']
+}
+
+child_fixture = {
+    'name': 'Child',
+    'properties': {
+        'age': {'type':'integer'},
+        'mother': {'type': 'object'}
+    },
+    'required': ['age', 'mother']
 }
 
 
@@ -105,46 +124,46 @@ class TestCore(unittest.TestCase):
         exc = warlock.InvalidOperation
         self.assertRaises(exc, sweden.update, {'population': 'N/A'})
         self.assertRaises(exc, sweden.update, {'overloard': 'Bears'})
-    
+
     def test_naming(self):
         Country = warlock.model_factory(fixture)
-        self.assertEqual(Country.__name__, 'Country')
-        
+        self.assertEqual('Country', Country.__name__)
+
         Country2 = warlock.model_factory(fixture, name='Country2')
-        self.assertEqual(Country2.__name__, 'Country2')
-        
+        self.assertEqual('Country2', Country2.__name__)
+
         nameless = warlock.model_factory(nameless_fixture)
-        self.assertEqual(nameless.__name__, 'Model')
-        
+        self.assertEqual('Model', nameless.__name__)
+
         nameless2 = warlock.model_factory(nameless_fixture, name='Country3')
-        self.assertEqual(nameless2.__name__, 'Country3')
+        self.assertEqual('Country3', nameless2.__name__)
 
     def test_deepcopy(self):
         """Make sure we aren't leaking references."""
         Mixmaster = warlock.model_factory(complex_fixture)
         mike = Mixmaster(sub={'foo': 'mike'})
 
-        self.assertEquals(mike.sub['foo'], 'mike')
+        self.assertEquals('mike', mike.sub['foo'])
 
         mike_1 = mike.copy()
         mike_1['sub']['foo'] = 'james'
-        self.assertEquals(mike.sub['foo'], 'mike')
+        self.assertEquals('mike', mike.sub['foo'])
 
         mike_2 = dict(six.iteritems(mike))
         mike_2['sub']['foo'] = 'james'
-        self.assertEquals(mike.sub['foo'], 'mike')
+        self.assertEquals('mike', mike.sub['foo'])
 
         mike_2 = dict(mike.items())
         mike_2['sub']['foo'] = 'james'
-        self.assertEquals(mike.sub['foo'], 'mike')
+        self.assertEquals('mike', mike.sub['foo'])
 
         mike_3_sub = list(six.itervalues(mike))[0]
         mike_3_sub['foo'] = 'james'
-        self.assertEquals(mike.sub['foo'], 'mike')
+        self.assertEquals('mike', mike.sub['foo'])
 
         mike_3_sub = list(mike.values())[0]
         mike_3_sub['foo'] = 'james'
-        self.assertEquals(mike.sub['foo'], 'mike')
+        self.assertEquals('mike', mike.sub['foo'])
 
     def test_forbidden_methods(self):
         Country = warlock.model_factory(fixture)
@@ -159,7 +178,7 @@ class TestCore(unittest.TestCase):
         sweden = Country(name='Sweden', population=9379116)
 
         sweden['name'] = 'Finland'
-        self.assertEqual(sweden['name'], 'Finland')
+        self.assertEqual('Finland', sweden['name'])
 
         del sweden['name']
         self.assertRaises(AttributeError, getattr, sweden, 'name')
@@ -169,7 +188,7 @@ class TestCore(unittest.TestCase):
         sweden = Country(name='Sweden', population=9379116)
 
         sweden.name = 'Finland'
-        self.assertEqual(sweden.name, 'Finland')
+        self.assertEqual('Finland', sweden.name)
 
         delattr(sweden, 'name')
         self.assertRaises(AttributeError, getattr, sweden, 'name')
@@ -236,3 +255,50 @@ class TestCore(unittest.TestCase):
 
         for patch in json.loads(sweden.patch):
             self.assertTrue(patch in patches)
+
+    def test_resolver(self):
+        from jsonschema import RefResolver
+        schemas_path = 'file://' + os.path.join(os.path.dirname(__file__), 'schemas/')
+        resolver = RefResolver(schemas_path, None)
+
+        country_schema_file = open(os.path.join(os.path.dirname(__file__), 'schemas/') + 'country.json')
+        person_schema_file = open(os.path.join(os.path.dirname(__file__), 'schemas/') + 'person.json')
+
+        country_schema = json.load(country_schema_file)
+        person_schema = json.load(person_schema_file)
+        Country = warlock.model_factory(country_schema, resolver)
+        Person = warlock.model_factory(person_schema, resolver)
+
+        england = Country(
+            name="England",
+            population=53865800,
+            overlord=Person(
+                title="Queen",
+                firstname="Elizabeth",
+                lastname="Windsor"
+            )
+        )
+        expected = {
+            'name': 'England',
+            'population': 53865800,
+            'overlord': {
+                'title': 'Queen',
+                'lastname': 'Windsor',
+                'firstname': 'Elizabeth'
+             }
+        }
+        self.assertEqual(england, expected)
+
+    def test_recursive_models(self):
+        Parent = warlock.model_factory(parent_fixture)
+        Child = warlock.model_factory(child_fixture)
+
+        mom = Parent(name='Abby', children=[])
+
+        teenager = Child(age=15, mother=mom)
+        toddler = Child(age=3, mother=mom)
+
+        mom.children = [teenager, toddler]
+
+        self.assertEqual(mom.children[0].age, 15)
+        self.assertEqual(mom.children[1].age, 3)

@@ -137,6 +137,9 @@ class Model(dict):
     def validate(self, obj):
         """Apply a JSON schema to an object"""
         try:
-            jsonschema.validate(obj, self.schema)
+            if self.resolver is not None:
+                jsonschema.validate(obj, self.schema, resolver=self.resolver)
+            else:
+                jsonschema.validate(obj, self.schema)
         except jsonschema.ValidationError as exc:
             raise exceptions.ValidationError(str(exc))
