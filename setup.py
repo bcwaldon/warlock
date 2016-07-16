@@ -31,7 +31,7 @@ setuptools.setup(
     url='http://github.com/bcwaldon/warlock',
     packages=['warlock'],
     install_requires=parse_requirements(),
-    classifiers = [
+    classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: Apache Software License",
