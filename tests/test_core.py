@@ -262,8 +262,8 @@ class TestCore(unittest.TestCase):
 
         country_schema = json.load(country_schema_file)
         person_schema = json.load(person_schema_file)
-        Country = warlock.model_factory(country_schema, resolver)
-        Person = warlock.model_factory(person_schema, resolver)
+        Country = warlock.model_factory(country_schema, resolver=resolver)
+        Person = warlock.model_factory(person_schema, resolver=resolver)
 
         england = Country(
             name="England",
