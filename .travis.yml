@@ -5,7 +5,8 @@ python:
   - "3.3"
   - "3.4"
   - "3.5"
-install:
+  - "3.6"
+ install:
 - "pip install --upgrade pytest flake8"
 script:
 - "python setup.py develop"
