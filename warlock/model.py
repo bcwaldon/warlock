@@ -134,6 +134,11 @@ class Model(dict):
         warnings.warn(deprecation_msg, DeprecationWarning, stacklevel=2)
         return copy.deepcopy(self.__dict__['changes'])
 
+    def apply_changes(self):
+        """Apply and clear all changes"""
+        self.__dict__['__original__'] = copy.deepcopy(self)
+        self.__dict__['changes'] = {}
+
     def validate(self, obj):
         """Apply a JSON schema to an object"""
         try:
