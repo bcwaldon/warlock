@@ -8,10 +8,9 @@ python:
   - "3.5"
   - "3.6"
 install:
-  - echo $TRAVIS_PYTHON_VERSION
   - pip install --upgrade pip
   - pip install --upgrade pytest flake8
 script:
   - python setup.py develop
-  - flake8
+  - if [[ $TRAVIS_PYTHON_VERSION > "2.6" ]]; then flake8; fi
   - py.test
