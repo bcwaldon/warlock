@@ -1,7 +1,6 @@
 dist: trusty
 language: python
 python:
-  - "2.6"
   - "2.7"
   - "3.3"
   - "3.4"
@@ -12,5 +11,5 @@ install:
   - pip install --upgrade pytest flake8
 script:
   - python setup.py develop
-  - if [[ $TRAVIS_PYTHON_VERSION > "2.6" ]]; then flake8; fi
+  - flake8
   - py.test
