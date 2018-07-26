@@ -114,9 +114,9 @@ class TestCore(unittest.TestCase):
         Country = warlock.model_factory(fixture)
         sweden = Country(name='Sweden', population=9379116)
         self.assertEqual(set(list(six.iteritems(sweden))),
-                         set([('name', 'Sweden'), ('population', 9379116)]))
+                         {('name', 'Sweden'), ('population', 9379116)})
         self.assertEqual(set(sweden.items()),
-                         set([('name', 'Sweden'), ('population', 9379116)]))
+                         {('name', 'Sweden'), ('population', 9379116)})
 
     def test_update(self):
         Country = warlock.model_factory(fixture)
