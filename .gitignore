@@ -5,3 +5,8 @@ warlock.egg-info/
 .tox/
 *.swp
 *.pyc
+.coverage
+.pytest_cache/
+.python-version
+htmlcov/
+.vscode/
