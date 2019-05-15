@@ -1,15 +1,41 @@
 dist: xenial
 language: python
+python: 3.7
 cache: pip
-python:
-  - "2.7"
-  - "3.4"
-  - "3.5"
-  - "3.6"
-  - "3.7"
+
+env:
+- TEST_CMD="pytest"
+
 install:
-- "pip install --upgrade pytest flake8"
+  - pip install pytest pytest-cov
+  - if [[ $TRAVIS_PYTHON_VERSION == 3.7 ]] && [[ "$TEST_CMD" == pytest* ]]; then
+      pip install pytest pytest-cov coveralls; fi
+  - if [[ $TEST_CMD == black* ]]; then pip install black; fi
+  - if [[ $TEST_CMD == flake8* ]]; then pip install flake8 flake8-bugbear flake8-todo; fi
+  - pip install -r requirements.txt
+
 script:
-- "python setup.py develop"
-- "flake8"
-- "py.test"
+- $TEST_CMD
+
+after_success:
+ - if [[ $TRAVIS_PYTHON_VERSION == 3.7 ]] && [[ "$TEST_CMD" == pytest* ]];
+     then coveralls; fi
+
+matrix:
+  include:
+    - name: "black"
+      env:
+        - TEST_CMD="black --check --verbose ."
+    - name: "flake8"
+      env:
+        - TEST_CMD="flake8 warlock"
+    - name: "pytest-py2.7"
+      python: 2.7
+    - name: "pytest-py3.4"
+      python: 3.4
+    - name: "pytest-py3.5"
+      python: 3.5
+    - name: "pytest-py3.6"
+      python: 3.6
+    - name: "pytest-py3.7"
+      python: 3.7
