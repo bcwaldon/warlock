@@ -1,0 +1,9 @@
+[flake8]
+ignore = E203, E266, E501, W503
+max-line-length = 88
+exclude =
+    .git
+    __pycache__
+    locale/
+    htmlcov/
+max-complexity = 10
