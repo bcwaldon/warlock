@@ -25,7 +25,6 @@ from . import exceptions
 
 
 class Model(dict):
-
     def __init__(self, *args, **kwargs):
         # we overload setattr so set this manually
         d = dict(*args, **kwargs)
@@ -37,8 +36,8 @@ class Model(dict):
         else:
             dict.__init__(self, d)
 
-        self.__dict__['changes'] = {}
-        self.__dict__['__original__'] = copy.deepcopy(d)
+        self.__dict__["changes"] = {}
+        self.__dict__["__original__"] = copy.deepcopy(d)
 
     def __setitem__(self, key, value):
         mutation = dict(self.items())
@@ -46,13 +45,12 @@ class Model(dict):
         try:
             self.validate(mutation)
         except exceptions.ValidationError as exc:
-            msg = ("Unable to set '%s' to %r. Reason: %s"
-                   % (key, value, str(exc)))
+            msg = "Unable to set '%s' to %r. Reason: %s" % (key, value, str(exc))
             raise exceptions.InvalidOperation(msg)
 
         dict.__setitem__(self, key, value)
 
-        self.__dict__['changes'][key] = value
+        self.__dict__["changes"][key] = value
 
     def __delitem__(self, key):
         mutation = dict(self.items())
@@ -60,8 +58,7 @@ class Model(dict):
         try:
             self.validate(mutation)
         except exceptions.ValidationError as exc:
-            msg = ("Unable to delete attribute '%s'. Reason: %s"
-                   % (key, str(exc)))
+            msg = "Unable to delete attribute '%s'. Reason: %s" % (key, str(exc))
             raise exceptions.InvalidOperation(msg)
 
         dict.__delitem__(self, key)
@@ -124,15 +121,15 @@ class Model(dict):
     @property
     def patch(self):
         """Return a jsonpatch object representing the delta"""
-        original = self.__dict__['__original__']
+        original = self.__dict__["__original__"]
         return jsonpatch.make_patch(original, dict(self)).to_string()
 
     @property
     def changes(self):
         """Dumber version of 'patch' method"""
-        deprecation_msg = 'Model.changes will be removed in warlock v2'
+        deprecation_msg = "Model.changes will be removed in warlock v2"
         warnings.warn(deprecation_msg, DeprecationWarning, stacklevel=2)
-        return copy.deepcopy(self.__dict__['changes'])
+        return copy.deepcopy(self.__dict__["changes"])
 
     def validate(self, obj):
         """Apply a JSON schema to an object"""

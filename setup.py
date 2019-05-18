@@ -17,46 +17,46 @@ import os
 
 
 def parse_requirements():
-    fap = open('requirements.txt', 'r')
+    fap = open("requirements.txt", "r")
     raw_req = fap.read()
     fap.close()
-    return raw_req.split('\n')
+    return raw_req.split("\n")
 
 
 def read(fname):
-    with open(os.path.join(os.path.dirname(__file__), fname), 'r') as fp:
+    with open(os.path.join(os.path.dirname(__file__), fname), "r") as fp:
         return fp.read()
 
 
 setuptools.setup(
-    name='warlock',
-    version='1.3.0',
-    description='Python object model built on JSON schema and JSON patch.',
-    long_description=read('README.md'),
-    long_description_content_type='text/markdown',
-    keywords=['JSON schema', 'JSON patch', 'model validation'],
-    author='Brian Waldon',
-    author_email='bcwaldon@gmail.com',
-    maintainer='Jan Willhaus',
-    maintainer_email='mail@janwillhaus.de',
-    url='http://github.com/bcwaldon/warlock',
-    packages=['warlock'],
+    name="warlock",
+    version="1.3.0",
+    description="Python object model built on JSON schema and JSON patch.",
+    long_description=read("README.md"),
+    long_description_content_type="text/markdown",
+    keywords=["JSON schema", "JSON patch", "model validation"],
+    author="Brian Waldon",
+    author_email="bcwaldon@gmail.com",
+    maintainer="Jan Willhaus",
+    maintainer_email="mail@janwillhaus.de",
+    url="http://github.com/bcwaldon/warlock",
+    packages=["warlock"],
     install_requires=parse_requirements(),
-    license='Apache-2.0',
+    license="Apache-2.0",
     classifiers=[
-        'Development Status :: 5 - Production/Stable',
-        'Intended Audience :: Developers',
-        'Operating System :: MacOS :: MacOS X',
-        'Operating System :: Microsoft :: Windows',
-        'Operating System :: POSIX',
-        'Programming Language :: Python',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
-        'Topic :: Software Development :: Libraries :: Python Modules',
+        "Development Status :: 5 - Production/Stable",
+        "Intended Audience :: Developers",
+        "Operating System :: MacOS :: MacOS X",
+        "Operating System :: Microsoft :: Windows",
+        "Operating System :: POSIX",
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 2",
+        "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.4",
+        "Programming Language :: Python :: 3.5",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Topic :: Software Development :: Libraries :: Python Modules",
     ],
 )
