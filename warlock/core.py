@@ -30,8 +30,8 @@ def model_factory(schema, resolver=None, base_class=model.Model, name=None):
 
     class Model(base_class):
         def __init__(self, *args, **kwargs):
-            self.__dict__['schema'] = schema
-            self.__dict__['resolver'] = resolver
+            self.__dict__["schema"] = schema
+            self.__dict__["resolver"] = resolver
             base_class.__init__(self, *args, **kwargs)
 
     if resolver is not None:
@@ -39,6 +39,6 @@ def model_factory(schema, resolver=None, base_class=model.Model, name=None):
 
     if name is not None:
         Model.__name__ = name
-    elif 'name' in schema:
-        Model.__name__ = str(schema['name'])
+    elif "name" in schema:
+        Model.__name__ = str(schema["name"])
     return Model
