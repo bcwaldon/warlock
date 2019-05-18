@@ -1,8 +1,21 @@
-# Warlock
+# Warlock — self-validating Python objects using JSON schema
 
-[![Build Status](https://travis-ci.org/bcwaldon/warlock.svg?branch=master)](https://travis-ci.org/bcwaldon/warlock)
+[![PyPI](https://img.shields.io/pypi/v/warlock.svg)][warlock]
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/warlock.svg)][warlock]
+[![PyPI - Downloads](https://img.shields.io/pypi/dw/warlock.svg)][pypistats]
 
-Build self-validating python objects using JSON schemas.
+[![Build Status](https://travis-ci.org/bcwaldon/warlock.svg?branch=master)][ci-builds]
+[![Coverage Status](https://coveralls.io/repos/github/bcwaldon/warlock/badge.svg?branch=master)][coveralls]
+
+## Installation
+
+Warlock is [available on PyPI][warlock]:
+
+```shell
+pip install warlock
+```
+
+## Usage
 
 1) Create your schema
 
@@ -56,3 +69,9 @@ Build self-validating python objects using JSON schemas.
     >>> sweden.patch
     '[{"path": "/population", "value": 9453000, "op": "add"}]'
     ```
+
+[warlock]: https://pypi.org/project/warlock/
+[pip]: https://pip.pypa.io/en/stable/
+[ci-builds]: https://travis-ci.org/bcwaldon/warlock
+[coveralls]: https://coveralls.io/github/bcwaldon/warlock?branch=master
+[pypistats]: https://pypistats.org/packages/warlock
