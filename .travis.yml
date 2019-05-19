@@ -19,16 +19,11 @@ script:
 
 jobs:
   include:
-    - name: "pytest-py2.7"
-      python: 2.7
-    - name: "pytest-py3.4"
-      python: 3.4
-    - name: "pytest-py3.5"
-      python: 3.5
-    - name: "pytest-py3.6"
-      python: 3.6
-    - name: "pytest-py3.7"
-      python: 3.7
+    - python: 2.7
+    - python: 3.4
+    - python: 3.5
+    - python: 3.6
+    - python: 3.7
       dist: xenial
       before_script:
         - pip install coveralls
