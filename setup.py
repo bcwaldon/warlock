@@ -17,14 +17,16 @@ import os
 
 
 def parse_requirements():
-    fap = open("requirements.txt", "r")
+    fap = open("requirements.txt", "r", encoding="utf-8")
     raw_req = fap.read()
     fap.close()
     return raw_req.split("\n")
 
 
 def read(fname):
-    with open(os.path.join(os.path.dirname(__file__), fname), "r") as fp:
+    with open(
+        os.path.join(os.path.dirname(__file__), fname), "r", encoding="utf-8"
+    ) as fp:
         return fp.read()
 
 
