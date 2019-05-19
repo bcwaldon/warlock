@@ -6,7 +6,10 @@
 
 [![Build Status](https://travis-ci.org/bcwaldon/warlock.svg?branch=master)][ci-builds]
 [![Coverage Status](https://coveralls.io/repos/github/bcwaldon/warlock/badge.svg?branch=master)][coveralls]
+![GitHub commits since latest release (branch)](https://img.shields.io/github/commits-since/bcwaldon/warlock/latest/master.svg)
+
 [![Package management: poetry](https://img.shields.io/badge/deps-poetry-blueviolet.svg)][poetry]
+[![Code Style Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black/)
 
 ## Installation
 
