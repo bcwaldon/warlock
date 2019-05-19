@@ -6,4 +6,7 @@ exclude =
     __pycache__
     locale/
     htmlcov/
+    venv/
+    .tox/
+    warlock-*/
 max-complexity = 10
