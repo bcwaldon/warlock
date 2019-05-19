@@ -1,6 +1,5 @@
-dist: xenial
 language: python
-python: 3.7
+python: 3.6
 cache:
   pip: true
   directories:
@@ -30,6 +29,7 @@ jobs:
       python: 3.6
     - name: "pytest-py3.7"
       python: 3.7
+      dist: xenial
       before_script:
         - pip install coveralls
       after_success:
@@ -38,6 +38,7 @@ jobs:
 
     - stage: linting
       python: 3.7
+      dist: xenial
       install:
         - pip install -U black flake8 flake8-bugbear flake8-todo
       script:
