@@ -10,3 +10,4 @@ warlock.egg-info/
 .python-version
 htmlcov/
 .vscode/
+poetry.lock

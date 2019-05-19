@@ -6,6 +6,7 @@
 
 [![Build Status](https://travis-ci.org/bcwaldon/warlock.svg?branch=master)][ci-builds]
 [![Coverage Status](https://coveralls.io/repos/github/bcwaldon/warlock/badge.svg?branch=master)][coveralls]
+[![Package management: poetry](https://img.shields.io/badge/deps-poetry-blueviolet.svg)][poetry]
 
 ## Installation
 
@@ -74,4 +75,5 @@ pip install warlock
 [pip]: https://pip.pypa.io/en/stable/
 [ci-builds]: https://travis-ci.org/bcwaldon/warlock
 [coveralls]: https://coveralls.io/github/bcwaldon/warlock?branch=master
+[poetry]: https://poetry.eustace.io/docs/
 [pypistats]: https://pypistats.org/packages/warlock
