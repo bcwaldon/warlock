@@ -28,10 +28,6 @@ classifiers = [
 packages = [
     { include = "warlock" },
 ]
-include = [
-  "README.md",
-  "LICENSE"
-]
 
 [tool.poetry.dependencies]
 python = "~2.7 || ^3.4"
