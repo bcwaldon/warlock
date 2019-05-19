@@ -7,11 +7,7 @@ env:
   - TEST_CMD="poetry run pytest"
 
 install:
-  - |
-    if [[ "$TEST_CMD" == pytest* ]]; then
-      pip install poetry
-      poetry --no-interaction install
-    fi
+  - if [[ "$TEST_CMD" == pytest* ]]; then pip install poetry && poetry --no-interaction install; fi
   - if [[ "$TEST_CMD" == pytest* ]] && [[ $TRAVIS_PYTHON_VERSION == 3.7 ]]; then
       pip install coveralls; fi
   - if [[ $TEST_CMD == black* ]]; then pip install black; fi
