@@ -34,7 +34,12 @@ jobs:
       python: 3.7
       dist: xenial
       install:
-        - pip install -U black flake8 flake8-bugbear flake8-todo
+        - pip install -U pre-commit
       script:
-        - black --check --verbose .
-        - flake8 warlock
+        - pre-commit run --all-files --verbose
+      env:
+        - PRE_COMMIT_HOME="$HOME/.cache/pre-commit"
+      cache:
+        pip: true
+        directories:
+          - "$PRE_COMMIT_HOME"
