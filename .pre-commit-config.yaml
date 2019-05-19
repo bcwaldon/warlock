@@ -1,0 +1,21 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: master
+    hooks:
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+      - id: flake8
+      - id: name-tests-test
+        args: ['--django']
+      - id: end-of-file-fixer
+      - id: check-added-large-files
+  - repo: https://github.com/asottile/reorder_python_imports
+    rev: master
+    hooks:
+      - id: reorder-python-imports
+  - repo: https://github.com/ambv/black
+    rev: stable
+    hooks:
+    - id: black
+default_language_version:
+  python: python3.7
