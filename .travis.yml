@@ -30,12 +30,11 @@ jobs:
       after_success:
         - coveralls
 
-
     - stage: linting
       python: 3.7
       dist: xenial
       install:
-        - pip install -U black flake8 flake8-bugbear flake8-todo
+        - pip install pre-commit
+        - pre-commit install-hooks
       script:
-        - black --check --verbose .
-        - flake8 warlock
+        - pre-commit run --all-files
