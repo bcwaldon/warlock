@@ -1,33 +1,25 @@
 dist: xenial
 language: python
 python: 3.7
-cache: pip
+cache:
+  pip: true
+  directories:
+    - "$HOME/.cache/pypoetry"
 
-env:
-  - TEST_CMD="poetry run pytest"
+stages:
+  - linting
+  - test
 
 install:
-  - if [[ "$TEST_CMD" == pytest* ]]; then pip install poetry && poetry --no-interaction install; fi
-  - if [[ "$TEST_CMD" == pytest* ]] && [[ $TRAVIS_PYTHON_VERSION == 3.7 ]]; then
-      pip install coveralls; fi
-  - if [[ $TEST_CMD == black* ]]; then pip install black; fi
-  - if [[ $TEST_CMD == flake8* ]]; then pip install flake8 flake8-bugbear flake8-todo; fi
+  - curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python - -y
+  - source $HOME/.poetry/env
+  - poetry --no-interaction install -v
 
 script:
-  - $TEST_CMD
+  - pytest
 
-after_success:
-  - if [[ $TRAVIS_PYTHON_VERSION == 3.7 ]] && [[ "$TEST_CMD" == pytest* ]];
-     then coveralls; fi
-
-matrix:
+jobs:
   include:
-    - name: "black"
-      env:
-        - TEST_CMD="black --check --verbose ."
-    - name: "flake8"
-      env:
-        - TEST_CMD="flake8 warlock"
     - name: "pytest-py2.7"
       python: 2.7
     - name: "pytest-py3.4"
@@ -38,3 +30,16 @@ matrix:
       python: 3.6
     - name: "pytest-py3.7"
       python: 3.7
+      before_script:
+        - pip install coveralls
+      after_success:
+        - coveralls
+
+
+    - stage: linting
+      python: 3.7
+      install:
+        - pip install -U black flake8 flake8-bugbear flake8-todo
+      script:
+        - black --check --verbose .
+        - flake8 warlock
