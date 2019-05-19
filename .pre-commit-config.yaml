@@ -8,20 +8,22 @@ repos:
         args: ['--django']
       - id: end-of-file-fixer
 
-  - repo: https://github.com/asottile/reorder_python_imports
-    rev: master
-    hooks:
-      - id: reorder-python-imports
-
   - repo: https://gitlab.com/pycqa/flake8
     rev: master
     hooks:
       - id: flake8
         additional_dependencies: [flake8-bugbear]
 
+  - repo: https://github.com/pre-commit/mirrors-isort
+    rev: master
+    hooks:
+    -   id: isort
+        additional_dependencies: [toml]
+
   - repo: https://github.com/ambv/black
     rev: stable
     hooks:
       - id: black
+
 default_language_version:
   python: python3.7

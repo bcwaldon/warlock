@@ -51,6 +51,10 @@ exclude = '''
 )/
 '''
 
+[tool.isort]
+known_third_party = ["jsonpatch","jsonschema","six"]
+known_first_party=["warlock"]
+
 [build-system]
 requires = ["poetry>=0.12"]
 build-backend = "poetry.masonry.api"
