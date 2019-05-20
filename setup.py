@@ -33,7 +33,7 @@ def read(fname):
 
 setuptools.setup(
     name="warlock",
-    version="1.3.2",
+    version="1.3.3",
     description="Python object model built on JSON schema and JSON patch.",
     long_description=read("README.md"),
     long_description_content_type="text/markdown",
