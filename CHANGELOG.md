@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Replace setuptools with poetry for packaging and dependency management
 
+## [1.3.2] - 2019-05-20
+### Fixed
+- README failed parsing in non utf-8 environments. Enforce encoding. #37
+
 ## [1.3.1] - 2019-05-19
 ### Added
 - Travis CI test support for Python 3.6, and 3.7
@@ -41,7 +45,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.8.0] - 2013-01-21
 
 ## [0.7.0] - 2012-11-26
-[Unreleased]: https://github.com/bcwaldon/warlock/compare/v1.3.1...HEAD
+[Unreleased]: https://github.com/bcwaldon/warlock/compare/v1.3.2...HEAD
+[1.3.2]: https://github.com/bcwaldon/warlock/compare/v1.3.1...v1.3.2
 [1.3.1]: https://github.com/bcwaldon/warlock/compare/v1.3.0...v1.3.1
 [1.3.0]: https://github.com/bcwaldon/warlock/compare/1.2.0...1.3.0
 [1.2.0]: https://github.com/bcwaldon/warlock/compare/1.1.0...1.2.0
