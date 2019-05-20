@@ -3,19 +3,17 @@ python: 3.6
 cache:
   pip: true
   directories:
-    - "$HOME/.cache/pypoetry"
+    - "$TRAVIS_BUILD_DIR/.tox"
 
 stages:
   - linting
   - test
 
 install:
-  - curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python - -y --preview
-  - source $HOME/.poetry/env
-  - poetry install --verbose --no-interaction
+  - pip install tox-travis poetry==1.0.0b3
 
 script:
-  - pytest
+  - tox
 
 jobs:
   include:
@@ -38,7 +36,7 @@ jobs:
       script:
         - pre-commit run --all-files --verbose
       env:
-        - PRE_COMMIT_HOME="$HOME/.cache/pre-commit"
+        - PRE_COMMIT_HOME="$TRAVIS_HOME/.cache/pre-commit"
       cache:
         pip: true
         directories:
