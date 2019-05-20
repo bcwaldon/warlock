@@ -13,18 +13,19 @@
 # limitations under the License.
 
 import setuptools
+import io
 import os
 
 
 def parse_requirements():
-    fap = open("requirements.txt", "r", encoding="utf-8")
+    fap = io.open("requirements.txt", "r", encoding="utf-8")
     raw_req = fap.read()
     fap.close()
     return raw_req.split("\n")
 
 
 def read(fname):
-    with open(
+    with io.open(
         os.path.join(os.path.dirname(__file__), fname), "r", encoding="utf-8"
     ) as fp:
         return fp.read()
