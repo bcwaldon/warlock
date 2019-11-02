@@ -6,17 +6,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ## Added
-- Meta: Locked dependencies via `poetry.lock` file in version control
-- Meta: Add [pre-commit](https://pre-commit.com) config to enforce code styling and file formatting
+- Meta: Locked dependencies via `poetry.lock` file in version control. #44
+- Meta: Add [pre-commit](https://pre-commit.com) config to enforce code styling and file formatting. #43
+- Meta: Add [tox](https://tox.readthedocs.io/en/latest/index.html) config for test automation across Python versions. #47
+- Tests for DeprecationWarnings issued for `Model.changes`. #46
 
 ### Fixed
-- Fixed DeprecationWarnings for using `assertEquals` in tests
+- Fixed DeprecationWarnings for using `assertEquals` in tests. #45
 
 ### Changed
-- Meta: Replace setuptools with poetry for packaging and dependency management
+- Meta: Replace setuptools with poetry for packaging and dependency management. #35
+- Changed behavior of `model_factory` back to pre-1.3 call signature. #39
 
 ### Removed
-- Support for Python 3.4 (EOL)
+- Support for Python 3.4 (EOL). #44
 
 ## [1.3.3] - 2019-05-20
 ### Fixed
