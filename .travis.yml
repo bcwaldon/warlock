@@ -30,7 +30,6 @@ jobs:
       after_success:
         - coveralls
 
-
     - stage: linting
       python: 3.7
       dist: xenial
