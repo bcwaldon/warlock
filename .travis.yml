@@ -10,9 +10,10 @@ stages:
   - test
 
 install:
-  - curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python - -y
+  - curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python - -y --preview
   - source $HOME/.poetry/env
-  - poetry --no-interaction install -v
+  - poetry config virtualenvs.create false
+  - poetry --no-interaction --verbose install
 
 script:
   - pytest
