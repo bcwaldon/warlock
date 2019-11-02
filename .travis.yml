@@ -10,9 +10,9 @@ stages:
   - test
 
 install:
-  - curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python - -y
+  - curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python - -y --preview
   - source $HOME/.poetry/env
-  - poetry --no-interaction install -v
+  - poetry install --verbose --no-interaction
 
 script:
   - pytest
@@ -23,6 +23,7 @@ jobs:
     - python: 3.5
     - python: 3.6
     - python: 3.7
+    - python: 3.8
       dist: xenial
       before_script:
         - pip install coveralls
