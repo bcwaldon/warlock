@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ## Added
 - Meta: Locked dependencies via `poetry.lock` file in version control
+- Meta: Add [pre-commit](https://pre-commit.com) config to enforce code styling and file formatting
 
 ### Changed
 - Meta: Replace setuptools with poetry for packaging and dependency management
