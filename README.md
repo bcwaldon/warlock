@@ -1,4 +1,6 @@
-# Warlock — self-validating Python objects using JSON schema
+# Warlock
+
+**Create self-validating Python objects using JSON schema.**
 
 [![PyPI](https://img.shields.io/pypi/v/warlock.svg)][warlock]
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/warlock.svg)][warlock]
