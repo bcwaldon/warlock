@@ -187,11 +187,14 @@ class TestCore(unittest.TestCase):
     def test_changes(self):
         Country = warlock.model_factory(fixture)
         sweden = Country(name="Sweden", population=9379116)
-        self.assertEqual(sweden.changes, {})
+        with self.assertWarns(DeprecationWarning):
+            self.assertEqual(sweden.changes, {})
         sweden["name"] = "Finland"
-        self.assertEqual(sweden.changes, {"name": "Finland"})
+        with self.assertWarns(DeprecationWarning):
+            self.assertEqual(sweden.changes, {"name": "Finland"})
         sweden["name"] = "Norway"
-        self.assertEqual(sweden.changes, {"name": "Norway"})
+        with self.assertWarns(DeprecationWarning):
+            self.assertEqual(sweden.changes, {"name": "Norway"})
 
     def test_patch_no_changes(self):
         Country = warlock.model_factory(fixture)
