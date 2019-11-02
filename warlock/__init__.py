@@ -14,5 +14,5 @@
 
 """Public-facing Warlock API"""
 
-from warlock.core import model_factory  # NOQA
-from warlock.exceptions import InvalidOperation  # NOQA
+from warlock.core import model_factory  # noqa: F401
+from warlock.exceptions import InvalidOperation  # noqa: F401
