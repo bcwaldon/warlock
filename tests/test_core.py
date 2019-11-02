@@ -16,6 +16,7 @@ import copy
 import json
 import os
 import unittest
+import warnings
 
 import six
 
@@ -187,14 +188,20 @@ class TestCore(unittest.TestCase):
     def test_changes(self):
         Country = warlock.model_factory(fixture)
         sweden = Country(name="Sweden", population=9379116)
-        with self.assertWarns(DeprecationWarning):
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
             self.assertEqual(sweden.changes, {})
+            assert w[0].category == DeprecationWarning
         sweden["name"] = "Finland"
-        with self.assertWarns(DeprecationWarning):
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
             self.assertEqual(sweden.changes, {"name": "Finland"})
+            assert w[0].category == DeprecationWarning
         sweden["name"] = "Norway"
-        with self.assertWarns(DeprecationWarning):
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
             self.assertEqual(sweden.changes, {"name": "Norway"})
+            assert w[0].category == DeprecationWarning
 
     def test_patch_no_changes(self):
         Country = warlock.model_factory(fixture)
