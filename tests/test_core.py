@@ -13,15 +13,13 @@
 # limitations under the License.
 
 import copy
-import unittest
-import os
-
 import json
+import os
+import unittest
 
 import six
 
 import warlock
-
 
 fixture = {
     "name": "Country",
