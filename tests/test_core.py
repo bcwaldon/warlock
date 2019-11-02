@@ -134,27 +134,27 @@ class TestCore(unittest.TestCase):
         Mixmaster = warlock.model_factory(complex_fixture)
         mike = Mixmaster(sub={"foo": "mike"})
 
-        self.assertEquals("mike", mike.sub["foo"])
+        self.assertEqual("mike", mike.sub["foo"])
 
         mike_1 = mike.copy()
         mike_1["sub"]["foo"] = "james"
-        self.assertEquals("mike", mike.sub["foo"])
+        self.assertEqual("mike", mike.sub["foo"])
 
         mike_2 = dict(six.iteritems(mike))
         mike_2["sub"]["foo"] = "james"
-        self.assertEquals("mike", mike.sub["foo"])
+        self.assertEqual("mike", mike.sub["foo"])
 
         mike_2 = dict(mike.items())
         mike_2["sub"]["foo"] = "james"
-        self.assertEquals("mike", mike.sub["foo"])
+        self.assertEqual("mike", mike.sub["foo"])
 
         mike_3_sub = list(six.itervalues(mike))[0]
         mike_3_sub["foo"] = "james"
-        self.assertEquals("mike", mike.sub["foo"])
+        self.assertEqual("mike", mike.sub["foo"])
 
         mike_3_sub = list(mike.values())[0]
         mike_3_sub["foo"] = "james"
-        self.assertEquals("mike", mike.sub["foo"])
+        self.assertEqual("mike", mike.sub["foo"])
 
     def test_forbidden_methods(self):
         Country = warlock.model_factory(fixture)
