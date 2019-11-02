@@ -5,8 +5,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## Added
+- Meta: Locked dependencies via `poetry.lock` file in version control
+
 ### Changed
-- Replace setuptools with poetry for packaging and dependency management
+- Meta: Replace setuptools with poetry for packaging and dependency management
+
+### Removed
+- Support for Python 3.4 (EOL)
 
 ## [1.3.3] - 2019-05-20
 ### Fixed
@@ -52,6 +58,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.8.0] - 2013-01-21
 
 ## [0.7.0] - 2012-11-26
+
 [Unreleased]: https://github.com/bcwaldon/warlock/compare/v1.3.3...HEAD
 [1.3.3]: https://github.com/bcwaldon/warlock/compare/v1.3.2...v1.3.3
 [1.3.2]: https://github.com/bcwaldon/warlock/compare/v1.3.1...v1.3.2
