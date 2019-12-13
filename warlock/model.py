@@ -19,7 +19,6 @@ import warnings
 
 import jsonpatch
 import jsonschema
-import six
 
 from . import exceptions
 
@@ -104,14 +103,8 @@ class Model(dict):
             raise exceptions.InvalidOperation(str(exc))
         dict.update(self, other)
 
-    def iteritems(self):
-        return six.iteritems(copy.deepcopy(dict(self)))
-
     def items(self):
         return copy.deepcopy(dict(self)).items()
-
-    def itervalues(self):
-        return six.itervalues(copy.deepcopy(dict(self)))
 
     def values(self):
         return copy.deepcopy(dict(self)).values()

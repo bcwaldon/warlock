@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "warlock"
-version = "1.4.0-alpha"
+version = "2.0.0-alpha"
 description = "Python object model built on JSON schema and JSON patch."
 readme = "README.md"
 authors = ["Brian Waldon <bcwaldon@gmail.com>"]
@@ -16,8 +16,6 @@ classifiers = [
     "Operating System :: Microsoft :: Windows",
     "Operating System :: POSIX",
     "Programming Language :: Python",
-    "Programming Language :: Python :: 2",
-    "Programming Language :: Python :: 2.7",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.5",
     "Programming Language :: Python :: 3.6",
@@ -30,13 +28,12 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = "~2.7 || ^3.5"
+python = "^3.5"
 jsonschema = "^3"
 jsonpatch = "^1"
-six = "*"
 
 [tool.poetry.dev-dependencies]
-pytest = "^4.0"
+pytest = "^5.0"
 pytest-cov = "^2.8"
 
 [tool.black]
@@ -52,7 +49,7 @@ exclude = '''
 '''
 
 [tool.isort]
-known_third_party = ["jsonpatch","jsonschema","six"]
+known_third_party = ["jsonpatch","jsonschema"]
 known_first_party=["warlock"]
 
 [build-system]
