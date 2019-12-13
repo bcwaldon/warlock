@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 - Support for Python 3.4 (EOL). #44
+- Support for Python 2.7 (EOL by 2019-01-01). #48
 
 ## [1.3.3] - 2019-05-20
 ### Fixed
