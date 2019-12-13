@@ -10,14 +10,13 @@ stages:
   - test
 
 install:
-  - pip install tox-travis poetry==1.0.0b3
+  - pip install tox-travis poetry==1.0.0
 
 script:
   - tox
 
 jobs:
   include:
-    - python: 2.7
     - python: 3.5
     - python: 3.6
     - python: 3.7
