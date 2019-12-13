@@ -1,4 +1,4 @@
-# Warlock
+# Warlock 🧙‍♀️
 
 **Create self-validating Python objects using JSON schema.**
 
