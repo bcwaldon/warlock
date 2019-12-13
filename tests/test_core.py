@@ -18,8 +18,6 @@ import os
 import unittest
 import warnings
 
-import six
-
 import warlock
 
 fixture = {
@@ -63,13 +61,6 @@ class TestCore(unittest.TestCase):
         Country = warlock.model_factory(fixture)
         self.assertRaises(ValueError, Country, name=1)
 
-    def test_class_name_from_unicode_schema_name(self):
-        fixture_copy = copy.deepcopy(fixture)
-        fixture_copy["name"] = six.text_type(fixture_copy["name"])
-        # Can't set class.__name__ to a unicode object, ensure warlock
-        # does some magic to make it possible
-        warlock.model_factory(fixture_copy)
-
     def test_invalid_operations(self):
         Country = warlock.model_factory(fixture)
         sweden = Country(name="Sweden", population=9379116)
@@ -103,7 +94,7 @@ class TestCore(unittest.TestCase):
         Country = warlock.model_factory(fixture)
         sweden = Country(name="Sweden", population=9379116)
         self.assertEqual(
-            set(list(six.iteritems(sweden))),
+            set(list(sweden.items())),
             set([("name", "Sweden"), ("population", 9379116)]),
         )
         self.assertEqual(
@@ -141,16 +132,8 @@ class TestCore(unittest.TestCase):
         mike_1["sub"]["foo"] = "james"
         self.assertEqual("mike", mike.sub["foo"])
 
-        mike_2 = dict(six.iteritems(mike))
-        mike_2["sub"]["foo"] = "james"
-        self.assertEqual("mike", mike.sub["foo"])
-
         mike_2 = dict(mike.items())
         mike_2["sub"]["foo"] = "james"
-        self.assertEqual("mike", mike.sub["foo"])
-
-        mike_3_sub = list(six.itervalues(mike))[0]
-        mike_3_sub["foo"] = "james"
         self.assertEqual("mike", mike.sub["foo"])
 
         mike_3_sub = list(mike.values())[0]
