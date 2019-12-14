@@ -16,7 +16,6 @@ import copy
 import json
 import os
 import unittest
-import warnings
 
 import warlock
 
@@ -140,13 +139,16 @@ class TestCore(unittest.TestCase):
         mike_3_sub["foo"] = "james"
         self.assertEqual("mike", mike.sub["foo"])
 
-    def test_forbidden_methods(self):
+    def test_previously_forbidden_methods(self):
         Country = warlock.model_factory(fixture)
         sweden = Country(name="Sweden", population=9379116)
-        exc = warlock.InvalidOperation
-        self.assertRaises(exc, sweden.clear)
-        self.assertRaises(exc, sweden.pop, 0)
-        self.assertRaises(exc, sweden.popitem)
+        sweden.clear()
+        self.assertDictEqual(sweden, {})
+        sweden = Country(name="Sweden", population=9379116)
+        self.assertEqual(sweden.pop("population"), 9379116)
+        self.assertEqual(sweden, {"name": "Sweden"})
+        self.assertEqual(sweden.popitem(), ("name", "Sweden"))
+        self.assertEqual(sweden, {})
 
     def test_dict_syntax(self):
         Country = warlock.model_factory(fixture)
@@ -167,24 +169,6 @@ class TestCore(unittest.TestCase):
 
         delattr(sweden, "name")
         self.assertRaises(AttributeError, getattr, sweden, "name")
-
-    def test_changes(self):
-        Country = warlock.model_factory(fixture)
-        sweden = Country(name="Sweden", population=9379116)
-        with warnings.catch_warnings(record=True) as w:
-            warnings.simplefilter("always")
-            self.assertEqual(sweden.changes, {})
-            assert w[0].category == DeprecationWarning
-        sweden["name"] = "Finland"
-        with warnings.catch_warnings(record=True) as w:
-            warnings.simplefilter("always")
-            self.assertEqual(sweden.changes, {"name": "Finland"})
-            assert w[0].category == DeprecationWarning
-        sweden["name"] = "Norway"
-        with warnings.catch_warnings(record=True) as w:
-            warnings.simplefilter("always")
-            self.assertEqual(sweden.changes, {"name": "Norway"})
-            assert w[0].category == DeprecationWarning
 
     def test_patch_no_changes(self):
         Country = warlock.model_factory(fixture)

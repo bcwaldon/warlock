@@ -15,7 +15,6 @@
 """Self-validating model for arbitrary objects"""
 
 import copy
-import warnings
 
 import jsonpatch
 import jsonschema
@@ -35,7 +34,6 @@ class Model(dict):
         else:
             dict.__init__(self, d)
 
-        self.__dict__["changes"] = {}
         self.__dict__["__original__"] = copy.deepcopy(d)
 
     def __setitem__(self, key, value):
@@ -44,12 +42,10 @@ class Model(dict):
         try:
             self.validate(mutation)
         except exceptions.ValidationError as exc:
-            msg = "Unable to set '%s' to %r. Reason: %s" % (key, value, str(exc))
+            msg = "Unable to set '%s' to %r. Reason: %s" % (key, value, exc)
             raise exceptions.InvalidOperation(msg)
 
         dict.__setitem__(self, key, value)
-
-        self.__dict__["changes"][key] = value
 
     def __delitem__(self, key):
         mutation = dict(self.items())
@@ -57,8 +53,8 @@ class Model(dict):
         try:
             self.validate(mutation)
         except exceptions.ValidationError as exc:
-            msg = "Unable to delete attribute '%s'. Reason: %s" % (key, str(exc))
-            raise exceptions.InvalidOperation(msg)
+            msg = "Unable to delete attribute '%s'. Reason: %s" % (key, exc)
+            raise exceptions.InvalidOperation(msg) from exc
 
         dict.__delitem__(self, key)
 
@@ -77,13 +73,40 @@ class Model(dict):
     # BEGIN dict compatibility methods
 
     def clear(self):
-        raise exceptions.InvalidOperation()
+        mutation = dict(self.items())
+        keys = list(mutation.keys())
+        for key in keys:
+            del mutation[key]
+            try:
+                self.validate(mutation)
+            except exceptions.ValidationError as exc:
+                msg = "Unable to clear data. Reason: %s" % (exc,)
+                raise exceptions.InvalidOperation(msg)
+        for key in keys:
+            del self[key]
 
-    def pop(self, key, default=None):
-        raise exceptions.InvalidOperation()
+    def pop(self, key, *args):
+        try:
+            value = self.__getitem__(key)
+            self.__delitem__(key)
+        except KeyError:
+            if args:
+                return args[0]
+            raise
+        except exceptions.InvalidOperation as exc:
+            msg = "Unable to pop '%s'. Reason: %s" % (key, exc.__context__)
+            raise exceptions.InvalidOperation(msg)
+        return value
 
     def popitem(self):
-        raise exceptions.InvalidOperation()
+        item = next(iter(self.items()))
+        key = item[0]
+        try:
+            self.__delitem__(key)
+        except exceptions.InvalidOperation as exc:
+            msg = "Unable to pop next item '%s'. Reason: %s" % (item, exc.__context__)
+            raise exceptions.InvalidOperation(msg)
+        return item
 
     def copy(self):
         return copy.deepcopy(dict(self))
@@ -117,15 +140,10 @@ class Model(dict):
         original = self.__dict__["__original__"]
         return jsonpatch.make_patch(original, dict(self)).to_string()
 
-    @property
-    def changes(self):
-        """Dumber version of 'patch' method"""
-        deprecation_msg = "Model.changes will be removed in warlock v2"
-        warnings.warn(deprecation_msg, DeprecationWarning, stacklevel=2)
-        return copy.deepcopy(self.__dict__["changes"])
-
-    def validate(self, obj):
+    def validate(self, obj=None):
         """Apply a JSON schema to an object"""
+        if obj is None:
+            obj = self
         try:
             if self.resolver is not None:
                 jsonschema.validate(obj, self.schema, resolver=self.resolver)
