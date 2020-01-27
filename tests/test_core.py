@@ -285,3 +285,29 @@ class TestCore(unittest.TestCase):
 
         self.assertEqual(mom.children[0].age, 15)
         self.assertEqual(mom.children[1].age, 3)
+
+    def test_benchmark(self):
+        from jsonschema import RefResolver
+        import time
+
+        t0 = time.time()
+
+        dirname = os.path.dirname(__file__)
+        schemas_path = "file://" + os.path.join(dirname, "schemas/")
+        resolver = RefResolver(schemas_path, None)
+
+        country_schema_file = open(os.path.join(dirname, "schemas/") + "country.json")
+
+        country_schema = json.load(country_schema_file)
+        Country = warlock.model_factory(country_schema, resolver=resolver)
+        obj = Country()
+
+        qs = [dict({'name': str(i), 'overlord': {'title': str(i)}}) for i in range(100)]
+
+        for build in qs:
+            # obj.update(build)
+            obj['name'] = build['name']
+            obj['overlord'] = build['overlord']
+
+        t1 = time.time()
+        print(f'time: {(t1-t0) * 1000}')

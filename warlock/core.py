@@ -17,6 +17,7 @@
 import copy
 
 from . import model
+from jsonschema.validators import validator_for
 
 
 def model_factory(schema, base_class=model.Model, name=None, resolver=None):
@@ -32,6 +33,13 @@ def model_factory(schema, base_class=model.Model, name=None, resolver=None):
         def __init__(self, *args, **kwargs):
             self.__dict__["schema"] = schema
             self.__dict__["resolver"] = resolver
+
+            cls = validator_for(self.schema)
+            if resolver is not None:
+                self.__dict__["validator_instance"] = cls(schema, resolver=resolver)
+            else:
+                self.__dict__["validator_instance"] = cls(schema)
+
             base_class.__init__(self, *args, **kwargs)
 
     if resolver is not None:
