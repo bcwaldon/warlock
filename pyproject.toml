@@ -28,13 +28,13 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.5"
+python = "^3.6"
 jsonschema = "^3"
 jsonpatch = "^1"
 
 [tool.poetry.dev-dependencies]
-pytest = "^5.0"
-pytest-cov = "^2.8"
+pytest = "^6.0"
+pytest-cov = "^3.0"
 
 [tool.black]
 line-length = 88
