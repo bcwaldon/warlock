@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "warlock"
-version = "2.0.0-alpha"
+version = "2.0.0"
 description = "Python object model built on JSON schema and JSON patch."
 readme = "README.md"
 authors = ["Brian Waldon <bcwaldon@gmail.com>"]
