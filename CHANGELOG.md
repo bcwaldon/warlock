@@ -5,11 +5,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-## Added
+
+## [2.0.0] - 2022-06-16
+### Added
 - Meta: Locked dependencies via `poetry.lock` file in version control. #44
 - Meta: Add [pre-commit](https://pre-commit.com) config to enforce code styling and file formatting. #43
 - Meta: Add [tox](https://tox.readthedocs.io/en/latest/index.html) config for test automation across Python versions. #47
 - Tests for DeprecationWarnings issued for `Model.changes`. #46
+- Cache the validator instance to speedup schema validation process. #55
+- Support for jsonschema 4.x. #65
+- Support for Python 3.9, 3.10. #65
 
 ### Fixed
 - Fixed DeprecationWarnings for using `assertEquals` in tests. #45
@@ -20,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 - Support for Python 3.4 (EOL). #44
+- Support for Python 3.5, 3.6 (EOL). #65
 - Support for Python 2.7 (EOL by 2019-01-01). #48
 
 ## [1.3.3] - 2019-05-20
@@ -67,7 +73,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.7.0] - 2012-11-26
 
-[Unreleased]: https://github.com/bcwaldon/warlock/compare/v1.3.3...HEAD
+[Unreleased]: https://github.com/bcwaldon/warlock/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/bcwaldon/warlock/compare/v1.3.3...v2.0.0
 [1.3.3]: https://github.com/bcwaldon/warlock/compare/v1.3.2...v1.3.3
 [1.3.2]: https://github.com/bcwaldon/warlock/compare/v1.3.1...v1.3.2
 [1.3.1]: https://github.com/bcwaldon/warlock/compare/v1.3.0...v1.3.1
