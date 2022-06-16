@@ -38,7 +38,7 @@ parent_fixture = {
     "name": "Parent",
     "properties": {
         "name": {"type": "string"},
-        "children": {"type": "array", "items": [{"type": "object"}]},
+        "children": {"type": "array", "items": {"type": "object"}},
     },
     "required": ["name", "children"],
 }
