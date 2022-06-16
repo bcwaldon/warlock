@@ -6,7 +6,7 @@
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/warlock.svg)][warlock]
 [![PyPI - Downloads](https://img.shields.io/pypi/dw/warlock.svg)][pypistats]
 
-[![Build Status](https://travis-ci.org/bcwaldon/warlock.svg?branch=master)][ci-builds]
+[![Build Status](https://github.com/bcwaldon/warlock/actions/workflows/ci.yaml/badge.svg)][ci-builds]
 [![Coverage Status](https://coveralls.io/repos/github/bcwaldon/warlock/badge.svg?branch=master)][coveralls]
 ![GitHub commits since latest release (branch)](https://img.shields.io/github/commits-since/bcwaldon/warlock/latest/master.svg)
 
@@ -78,7 +78,7 @@ pip install warlock
 
 [warlock]: https://pypi.org/project/warlock/
 [pip]: https://pip.pypa.io/en/stable/
-[ci-builds]: https://travis-ci.org/bcwaldon/warlock
+[ci-builds]: https://github.com/bcwaldon/warlock/actions/workflows/ci.yaml
 [coveralls]: https://coveralls.io/github/bcwaldon/warlock?branch=master
 [poetry]: https://poetry.eustace.io/docs/
 [pypistats]: https://pypistats.org/packages/warlock
