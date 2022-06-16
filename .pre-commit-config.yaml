@@ -18,7 +18,6 @@ repos:
         args: ["--django"] # Required to match on test*.py
 
       # Git-related
-      - id: no-commit-to-branch
       - id: check-merge-conflict
 
   - repo: https://gitlab.com/pycqa/flake8
