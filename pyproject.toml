@@ -29,7 +29,7 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.5"
-jsonschema = "^3"
+jsonschema = "^4"
 jsonpatch = "^1"
 
 [tool.poetry.dev-dependencies]
