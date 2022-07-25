@@ -23,6 +23,26 @@ import jsonschema
 from . import exceptions
 
 
+def dot_factory(attr):
+    if isinstance(attr, dict):
+        return DotDict(attr)
+    elif isinstance(attr, list):
+        return DotList(attr)
+    return attr
+
+
+class DotList(list):
+    def __getitem__(self, i: int):
+        item = list.__getitem__(self, i)
+        return dot_factory(item)
+
+
+class DotDict(dict):
+    def __getattr__(self, key):
+        attr = self.__getitem__(key)
+        return dot_factory(attr)
+
+
 class Model(dict):
     def __init__(self, *args, **kwargs):
         # we overload setattr so set this manually
@@ -64,7 +84,8 @@ class Model(dict):
 
     def __getattr__(self, key):
         try:
-            return self.__getitem__(key)
+            attr = self.__getitem__(key)
+            return dot_factory(attr)
         except KeyError:
             raise AttributeError(key)
 
