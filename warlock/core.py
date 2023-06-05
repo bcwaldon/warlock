@@ -30,16 +30,42 @@ def model_factory(schema, base_class=model.Model, name=None, resolver=None):
     resolver = resolver
 
     class Model(base_class):
-        def _setdefaults(self, root, schema_props):
+        def _setnested(self, path: list[str], value, root=None):
+            if root is None:
+                root = self
+            if len(path) > 1:
+                head = path[0]
+                if not head in root:
+                    root[head] = {}
+                self._setnested(path[1:], value, root=root[head])
+            elif len(path) == 1:
+                root[path[0]] = value
+
+        def _pathexists(self, path: list[str], root=None):
+            if root is None:
+                root = self
+            if len(path) == 1:
+                return path[0] in root
+            elif len(path) == 0:
+                return False
+            else:
+                head = path[0]
+                if head in root:
+                    return self._pathexists(path[1:], root=root[head])
+                else:
+                    return False
+
+        def _setdefaults(self, path: list[str], schema_props: dict):
             for name, prop in schema_props.items():
                 if "type" in prop:
+                    local_path = path.copy()
+                    local_path.append(name)
                     if prop["type"] == "object":
-                        if "properties" in prop and not name in self:
-                            root.__setitem__(name, dict())
-                            self._setdefaults(root[name], prop["properties"])
-                            continue
+                        if "properties" in prop:
+                            self._setdefaults(local_path, prop["properties"])
                     elif "default" in prop and not name in self:
-                        root.__setitem__(name, prop["default"])
+                        if not self._pathexists(local_path):
+                            self._setnested(local_path, prop["default"])
 
         def __init__(self, *args, **kwargs):
             self.__dict__["schema"] = schema
@@ -54,7 +80,7 @@ def model_factory(schema, base_class=model.Model, name=None, resolver=None):
             base_class.__init__(self, *args, **kwargs)
 
             if "properties" in schema:
-                self._setdefaults(self, schema["properties"])
+                self._setdefaults([], schema["properties"])
 
     if resolver is not None:
         Model.resolver = resolver
