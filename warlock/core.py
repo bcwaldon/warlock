@@ -41,12 +41,18 @@ def model_factory(schema, base_class=model.Model, name=None, resolver=None):
             else:
                 self.__dict__["validator_instance"] = cls(schema)
 
+            print("a", self)
+
             base_class.__init__(self, *args, **kwargs)
+
+            print("b", self)
 
             if "properties" in schema:
                 for name, property in schema["properties"].items():
-                    if "default" in property:
+                    if "default" in property and not name in self:
                         self.__setitem__(name, property["default"])
+
+            print("c", self)
 
     if resolver is not None:
         Model.resolver = resolver
