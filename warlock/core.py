@@ -43,6 +43,11 @@ def model_factory(schema, base_class=model.Model, name=None, resolver=None):
 
             base_class.__init__(self, *args, **kwargs)
 
+            if "properties" in schema:
+                for name, property in schema["properties"].items():
+                    if "default" in property:
+                        self.__setitem__(name, property["default"])
+
     if resolver is not None:
         Model.resolver = resolver
 
