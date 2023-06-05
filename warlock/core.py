@@ -31,6 +31,17 @@ def model_factory(schema, base_class=model.Model, name=None, resolver=None):
     resolver = resolver
 
     class Model(base_class):
+        def _setdefaults(self, root, schema_props):
+            for name, prop in schema_props.items():
+                if "type" in prop:
+                    if prop["type"] == "object":
+                        if "properties" in prop and not name in self:
+                            root.__setitem__(name, dict())
+                            self._setdefaults(root[name], prop["properties"])
+                            continue
+                    elif "default" in prop and not name in self:
+                        root.__setitem__(name, prop["default"])
+
         def __init__(self, *args, **kwargs):
             self.__dict__["schema"] = schema
             self.__dict__["resolver"] = resolver
@@ -41,18 +52,10 @@ def model_factory(schema, base_class=model.Model, name=None, resolver=None):
             else:
                 self.__dict__["validator_instance"] = cls(schema)
 
-            print("a", self)
-
             base_class.__init__(self, *args, **kwargs)
 
-            print("b", self)
-
             if "properties" in schema:
-                for name, property in schema["properties"].items():
-                    if "default" in property and not name in self:
-                        self.__setitem__(name, property["default"])
-
-            print("c", self)
+                self._setdefaults(self, schema["properties"])
 
     if resolver is not None:
         Model.resolver = resolver
