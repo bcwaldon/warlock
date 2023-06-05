@@ -55,6 +55,20 @@ nameless_fixture = {
     "additionalProperties": False,
 }
 
+default_values = {
+    "properties": {
+        "name": {"type": "string", "default": "Peter"},
+        "lastname": {"type": "string"},
+        "height": {
+            "type": "object",
+            "properties": {
+                "value": {"type": "number"},
+                "unit": {"type": "string", "default": "m"},
+            },
+        },
+    }
+}
+
 
 class TestCore(unittest.TestCase):
     def test_create_invalid_object(self):
@@ -285,3 +299,26 @@ class TestCore(unittest.TestCase):
 
         self.assertEqual(mom.children[0].age, 15)
         self.assertEqual(mom.children[1].age, 3)
+
+    def test_default_values(self):
+        Person = warlock.model_factory(default_values)
+
+        default = Person()
+        self.assertEqual(default.name, "Peter")
+        self.assertEqual(default.height, {"unit": "m"})
+
+        with_name = Person(name="Mary")
+        self.assertEqual(with_name.name, "Mary")
+        self.assertEqual(with_name.height, {"unit": "m"})
+
+        with_empty_height = Person(height={})
+        self.assertEqual(with_empty_height.name, "Peter")
+        self.assertEqual(with_empty_height.height, {"unit": "m"})
+
+        with_height_value = Person(height={"value": 1.2})
+        self.assertEqual(with_height_value.name, "Peter")
+        self.assertEqual(with_height_value.height, {"value": 1.2, "unit": "m"})
+
+        with_height = Person(height={"value": 120.0, "unit": "cm"})
+        self.assertEqual(with_height.name, "Peter")
+        self.assertEqual(with_height.height, {"value": 120.0, "unit": "cm"})
