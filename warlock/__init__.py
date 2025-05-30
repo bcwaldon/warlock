@@ -12,7 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Public-facing Warlock API"""
+"""Python object model built on JSON schema and JSON patch."""
 
 from warlock.core import model_factory  # noqa: F401
 from warlock.exceptions import InvalidOperation  # noqa: F401
+
+__version__ = "2.1.0"

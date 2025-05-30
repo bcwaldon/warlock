@@ -1,18 +1,16 @@
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["flit_core ~=3.2"]
+build-backend = "flit_core.buildapi"
 
-[tool.poetry]
+[project]
+dynamic = ["version", "description"]
 name = "warlock"
-version = "2.0.1"
-description = "Python object model built on JSON schema and JSON patch."
 readme = "README.md"
-authors = ["Brian Waldon <bcwaldon@gmail.com>"]
-maintainers = ["Stephen Finucane <stephen@that.guru>"]
-homepage = "http://github.com/bcwaldon/warlock"
-repository = "http://github.com/bcwaldon/warlock"
+authors = [{name = "Brian Waldon", email = "bcwaldon@gmail.com"}]
+maintainers = [{name = "Stephen Finucane", email = "stephen@that.guru"}]
+requires-python = ">=3.9"
 license = "Apache-2.0"
-keywords=["JSON schema", "JSON patch", "model validation"]
+keywords = ["JSON schema", "JSON patch", "model validation"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
@@ -28,18 +26,20 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
-packages = [
-    { include = "warlock" },
+dependencies = [
+    "jsonschema ~= 4.0",
+    "jsonpatch ~= 1.0",
 ]
 
-[tool.poetry.dependencies]
-python = ">=3.9"
-jsonschema = "^4"
-jsonpatch = "^1"
+[project.optional-dependencies]
+test = [
+    "pytest ~= 6.0",
+    "pytest-cov ~= 3.0",
+]
 
-[tool.poetry.dev-dependencies]
-pytest = "^6.0"
-pytest-cov = "^3.0"
+[project.urls]
+Homepage = "http://github.com/bcwaldon/warlock"
+"Source Code" = "http://github.com/bcwaldon/warlock"
 
 [tool.black]
 line-length = 88
@@ -55,4 +55,4 @@ exclude = '''
 
 [tool.isort]
 known_third_party = ["jsonpatch","jsonschema"]
-known_first_party=["warlock"]
+known_first_party = ["warlock"]
