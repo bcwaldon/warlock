@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-""" List of errors used in warlock """
+"""List of errors used in warlock"""
 
 
 class InvalidOperation(RuntimeError):

@@ -16,8 +16,9 @@
 
 import copy
 
-from . import model
 from jsonschema.validators import validator_for
+
+from . import model
 
 
 def model_factory(schema, base_class=model.Model, name=None, resolver=None):
