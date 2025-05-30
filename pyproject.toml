@@ -1,3 +1,7 @@
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
 [tool.poetry]
 name = "warlock"
 version = "2.0.1"
@@ -29,7 +33,7 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = ">=3.9"
 jsonschema = "^4"
 jsonpatch = "^1"
 
@@ -52,7 +56,3 @@ exclude = '''
 [tool.isort]
 known_third_party = ["jsonpatch","jsonschema"]
 known_first_party=["warlock"]
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
