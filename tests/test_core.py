@@ -262,11 +262,12 @@ class TestCore(unittest.TestCase):
         schemas_path = "file://" + os.path.join(dirname, "schemas/")
         resolver = RefResolver(schemas_path, None)
 
-        country_schema_file = open(os.path.join(dirname, "schemas/") + "country.json")
-        person_schema_file = open(os.path.join(dirname, "schemas/") + "person.json")
+        with open(os.path.join(dirname, "schemas/") + "country.json") as f:
+            country_schema = json.load(f)
 
-        country_schema = json.load(country_schema_file)
-        person_schema = json.load(person_schema_file)
+        with open(os.path.join(dirname, "schemas/") + "person.json") as f:
+            person_schema = json.load(f)
+
         Country = warlock.model_factory(country_schema, resolver=resolver)
         Person = warlock.model_factory(person_schema, resolver=resolver)
 
