@@ -17,6 +17,7 @@
 import copy
 
 from jsonschema.validators import validator_for
+from referencing import Registry
 
 from . import model
 
@@ -36,7 +37,7 @@ def model_factory(schema, base_class=model.Model, name=None, resolver=None):
                 root = self
             if len(path) > 1:
                 head = path[0]
-                if not head in root:
+                if head not in root:
                     root[head] = {}
                 self._setnested(path[1:], value, root=root[head])
             elif len(path) == 1:
@@ -64,7 +65,7 @@ def model_factory(schema, base_class=model.Model, name=None, resolver=None):
                     if prop["type"] == "object":
                         if "properties" in prop:
                             self._setdefaults(local_path, prop["properties"])
-                    elif "default" in prop and not name in self:
+                    elif "default" in prop and name not in self:
                         if not self._pathexists(local_path):
                             self._setnested(local_path, prop["default"])
 
@@ -73,7 +74,9 @@ def model_factory(schema, base_class=model.Model, name=None, resolver=None):
             self.__dict__["resolver"] = resolver
 
             cls = validator_for(self.schema)
-            if resolver is not None:
+            if isinstance(resolver, Registry):
+                self.__dict__["validator_instance"] = cls(schema, registry=resolver)
+            elif resolver is not None:
                 self.__dict__["validator_instance"] = cls(schema, resolver=resolver)
             else:
                 self.__dict__["validator_instance"] = cls(schema)

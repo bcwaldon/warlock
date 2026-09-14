@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: "v5.0.0"
+    rev: v6.0.0
     hooks:
       # General file-formatting
       - id: trailing-whitespace
@@ -8,35 +8,15 @@ repos:
       - id: end-of-file-fixer
       - id: check-json
       - id: check-toml
-
       # Python-related
       - id: debug-statements
       - id: name-tests-test
-        args: ["--django"] # Required to match on test*.py
-
+        args: ["--django"]  # Required to match on test*.py
       # Git-related
       - id: check-merge-conflict
-
-  - repo: https://github.com/pycqa/flake8
-    rev: "7.2.0"
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.16.7
     hooks:
-      - id: flake8
-        additional_dependencies:
-          - flake8-bugbear # Finds common application design anti-patterns
-
-  - repo: https://github.com/pre-commit/pygrep-hooks
-    rev: "v1.10.0"
-    hooks:
-      - id: python-check-blanket-noqa
-
-  - repo: https://github.com/pre-commit/mirrors-isort
-    rev: "v5.10.1"
-    hooks:
-      - id: isort
-        additional_dependencies:
-          - toml # Required for loading config from pyproject.toml
-
-  - repo: https://github.com/ambv/black
-    rev: "25.1.0"
-    hooks:
-      - id: black
+      - id: ruff-check
+        args: ['--fix', '--unsafe-fixes']
+      - id: ruff-format

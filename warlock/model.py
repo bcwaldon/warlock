@@ -31,7 +31,7 @@ class Model(dict):
         try:
             self.validate(d)
         except exceptions.ValidationError as exc:
-            raise ValueError(str(exc))
+            raise ValueError(str(exc)) from exc
         else:
             dict.__init__(self, d)
 
@@ -45,7 +45,7 @@ class Model(dict):
             self.validate(mutation)
         except exceptions.ValidationError as exc:
             msg = "Unable to set '%s' to %r. Reason: %s" % (key, value, str(exc))
-            raise exceptions.InvalidOperation(msg)
+            raise exceptions.InvalidOperation(msg) from exc
 
         dict.__setitem__(self, key, value)
 
@@ -58,15 +58,15 @@ class Model(dict):
             self.validate(mutation)
         except exceptions.ValidationError as exc:
             msg = "Unable to delete attribute '%s'. Reason: %s" % (key, str(exc))
-            raise exceptions.InvalidOperation(msg)
+            raise exceptions.InvalidOperation(msg) from exc
 
         dict.__delitem__(self, key)
 
     def __getattr__(self, key):
         try:
             return self.__getitem__(key)
-        except KeyError:
-            raise AttributeError(key)
+        except KeyError as exc:
+            raise AttributeError(key) from exc
 
     def __setattr__(self, key, value):
         self.__setitem__(key, value)
@@ -100,7 +100,7 @@ class Model(dict):
         try:
             self.validate(mutation)
         except exceptions.ValidationError as exc:
-            raise exceptions.InvalidOperation(str(exc))
+            raise exceptions.InvalidOperation(str(exc)) from exc
         dict.update(self, other)
 
     def items(self):
@@ -130,4 +130,4 @@ class Model(dict):
             self.validator_instance.validate(obj)
 
         except jsonschema.ValidationError as exc:
-            raise exceptions.ValidationError(str(exc))
+            raise exceptions.ValidationError(str(exc)) from exc

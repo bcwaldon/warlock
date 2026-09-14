@@ -8,7 +8,7 @@ name = "warlock"
 readme = "README.md"
 authors = [{name = "Brian Waldon", email = "bcwaldon@gmail.com"}]
 maintainers = [{name = "Stephen Finucane", email = "stephen@that.guru"}]
-requires-python = ">=3.9"
+requires-python = ">=3.11"
 license = "Apache-2.0"
 keywords = ["JSON schema", "JSON patch", "model validation"]
 classifiers = [
@@ -19,40 +19,34 @@ classifiers = [
     "Operating System :: POSIX",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 dependencies = [
     "jsonschema ~= 4.0",
     "jsonpatch ~= 1.0",
+    "referencing",
 ]
 
 [project.optional-dependencies]
 test = [
-    "pytest ~= 6.0",
-    "pytest-cov ~= 3.0",
+    "pytest ~= 9.0",
+    "pytest-cov ~= 7.1",
 ]
 
 [project.urls]
 Homepage = "http://github.com/bcwaldon/warlock"
 "Source Code" = "http://github.com/bcwaldon/warlock"
 
-[tool.black]
+[tool.ruff]
 line-length = 88
-include = '\.pyi?$'
-exclude = '''
-/(
-  | \.git
-  | \.venv
-  | venv
-  | __pycache__
-)/
-'''
 
-[tool.isort]
-known_third_party = ["jsonpatch","jsonschema"]
-known_first_party = ["warlock"]
+[tool.ruff.format]
+quote-style = "preserve"
+docstring-code-format = true
+
+[tool.ruff.lint]
+select = ["B", "E", "F", "G", "I", "LOG", "RUF", "W"]

@@ -150,7 +150,7 @@ class TestCore(unittest.TestCase):
         mike_2["sub"]["foo"] = "james"
         self.assertEqual("mike", mike.sub["foo"])
 
-        mike_3_sub = list(mike.values())[0]
+        mike_3_sub = next(iter(mike.values()))
         mike_3_sub["foo"] = "james"
         self.assertEqual("mike", mike.sub["foo"])
 
@@ -188,17 +188,17 @@ class TestCore(unittest.TestCase):
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter("always")
             self.assertEqual(sweden.changes, {})
-            assert w[0].category == DeprecationWarning
+            assert w[0].category is DeprecationWarning
         sweden["name"] = "Finland"
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter("always")
             self.assertEqual(sweden.changes, {"name": "Finland"})
-            assert w[0].category == DeprecationWarning
+            assert w[0].category is DeprecationWarning
         sweden["name"] = "Norway"
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter("always")
             self.assertEqual(sweden.changes, {"name": "Norway"})
-            assert w[0].category == DeprecationWarning
+            assert w[0].category is DeprecationWarning
 
     def test_patch_no_changes(self):
         Country = warlock.model_factory(fixture)
@@ -256,19 +256,31 @@ class TestCore(unittest.TestCase):
             self.assertTrue(patch in patches)
 
     def test_resolver(self):
-        from jsonschema import RefResolver
+        import referencing
+        import referencing.jsonschema
 
         dirname = os.path.dirname(__file__)
-        schemas_path = "file://" + os.path.join(dirname, "schemas/")
-        resolver = RefResolver(schemas_path, None)
+        schemas_dir = os.path.join(dirname, "schemas")
 
-        country_schema_file = open(os.path.join(dirname, "schemas/") + "country.json")
-        person_schema_file = open(os.path.join(dirname, "schemas/") + "person.json")
+        def retrieve(uri):
+            path = uri.removeprefix("file://")
+            with open(path) as f:
+                schema = json.load(f)
+            return referencing.Resource.from_contents(
+                schema, default_specification=referencing.jsonschema.DRAFT4
+            )
 
-        country_schema = json.load(country_schema_file)
-        person_schema = json.load(person_schema_file)
-        Country = warlock.model_factory(country_schema, resolver=resolver)
-        Person = warlock.model_factory(person_schema, resolver=resolver)
+        registry = referencing.Registry(retrieve=retrieve)
+
+        with open(os.path.join(schemas_dir, "country.json")) as country_schema_file:
+            country_schema = json.load(country_schema_file)
+        country_schema["id"] = f"file://{os.path.abspath(schemas_dir)}/country.json"
+
+        with open(os.path.join(schemas_dir, "person.json")) as person_schema_file:
+            person_schema = json.load(person_schema_file)
+
+        Country = warlock.model_factory(country_schema, resolver=registry)
+        Person = warlock.model_factory(person_schema, resolver=registry)
 
         england = Country(
             name="England",
