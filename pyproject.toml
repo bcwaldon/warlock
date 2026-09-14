@@ -48,4 +48,4 @@ quote-style = "preserve"
 docstring-code-format = true
 
 [tool.ruff.lint]
-select = ["E", "F", "G", "I", "LOG", "RUF", "W"]
+select = ["B", "E", "F", "G", "I", "LOG", "RUF", "W"]
