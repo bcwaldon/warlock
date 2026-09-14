@@ -40,18 +40,12 @@ test = [
 Homepage = "http://github.com/bcwaldon/warlock"
 "Source Code" = "http://github.com/bcwaldon/warlock"
 
-[tool.black]
+[tool.ruff]
 line-length = 88
-include = '\.pyi?$'
-exclude = '''
-/(
-  | \.git
-  | \.venv
-  | venv
-  | __pycache__
-)/
-'''
 
-[tool.isort]
-known_third_party = ["jsonpatch","jsonschema"]
-known_first_party = ["warlock"]
+[tool.ruff.format]
+quote-style = "preserve"
+docstring-code-format = true
+
+[tool.ruff.lint]
+select = ["E", "F", "G", "I", "LOG", "RUF", "W"]

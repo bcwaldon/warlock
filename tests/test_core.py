@@ -150,7 +150,7 @@ class TestCore(unittest.TestCase):
         mike_2["sub"]["foo"] = "james"
         self.assertEqual("mike", mike.sub["foo"])
 
-        mike_3_sub = list(mike.values())[0]
+        mike_3_sub = next(iter(mike.values()))
         mike_3_sub["foo"] = "james"
         self.assertEqual("mike", mike.sub["foo"])
 
@@ -188,17 +188,17 @@ class TestCore(unittest.TestCase):
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter("always")
             self.assertEqual(sweden.changes, {})
-            assert w[0].category == DeprecationWarning
+            assert w[0].category is DeprecationWarning
         sweden["name"] = "Finland"
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter("always")
             self.assertEqual(sweden.changes, {"name": "Finland"})
-            assert w[0].category == DeprecationWarning
+            assert w[0].category is DeprecationWarning
         sweden["name"] = "Norway"
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter("always")
             self.assertEqual(sweden.changes, {"name": "Norway"})
-            assert w[0].category == DeprecationWarning
+            assert w[0].category is DeprecationWarning
 
     def test_patch_no_changes(self):
         Country = warlock.model_factory(fixture)
