@@ -17,6 +17,7 @@
 import copy
 
 from jsonschema.validators import validator_for
+from referencing import Registry
 
 from . import model
 
@@ -73,7 +74,9 @@ def model_factory(schema, base_class=model.Model, name=None, resolver=None):
             self.__dict__["resolver"] = resolver
 
             cls = validator_for(self.schema)
-            if resolver is not None:
+            if isinstance(resolver, Registry):
+                self.__dict__["validator_instance"] = cls(schema, registry=resolver)
+            elif resolver is not None:
                 self.__dict__["validator_instance"] = cls(schema, resolver=resolver)
             else:
                 self.__dict__["validator_instance"] = cls(schema)

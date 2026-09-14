@@ -256,21 +256,31 @@ class TestCore(unittest.TestCase):
             self.assertTrue(patch in patches)
 
     def test_resolver(self):
-        from jsonschema import RefResolver
+        import referencing
+        import referencing.jsonschema
 
         dirname = os.path.dirname(__file__)
         schemas_dir = os.path.join(dirname, "schemas")
-        schemas_path = "file://" + schemas_dir + "/"
-        resolver = RefResolver(schemas_path, None)
+
+        def retrieve(uri):
+            path = uri.removeprefix("file://")
+            with open(path) as f:
+                schema = json.load(f)
+            return referencing.Resource.from_contents(
+                schema, default_specification=referencing.jsonschema.DRAFT4
+            )
+
+        registry = referencing.Registry(retrieve=retrieve)
 
         with open(os.path.join(schemas_dir, "country.json")) as country_schema_file:
             country_schema = json.load(country_schema_file)
+        country_schema["id"] = f"file://{os.path.abspath(schemas_dir)}/country.json"
 
         with open(os.path.join(schemas_dir, "person.json")) as person_schema_file:
             person_schema = json.load(person_schema_file)
 
-        Country = warlock.model_factory(country_schema, resolver=resolver)
-        Person = warlock.model_factory(person_schema, resolver=resolver)
+        Country = warlock.model_factory(country_schema, resolver=registry)
+        Person = warlock.model_factory(person_schema, resolver=registry)
 
         england = Country(
             name="England",
